@@ -1,0 +1,7 @@
+export enum AssetSource {
+  "FUND_ADMIN" = "FUND_ADMIN",
+  "FUND_MANAGER" = "FUND_MANAGER",
+  "INVESTOR" = "INVESTOR",
+  "THIRD_PARTY" = "THIRD_PARTY",
+  "UNKNOWN" = "UNKNOWN",
+}

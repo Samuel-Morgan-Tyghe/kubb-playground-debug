@@ -1,0 +1,4 @@
+export enum OwnerType {
+  "GENERAL_PARTNER" = "GENERAL_PARTNER",
+  "LIMITED_PARTNER" = "LIMITED_PARTNER",
+}

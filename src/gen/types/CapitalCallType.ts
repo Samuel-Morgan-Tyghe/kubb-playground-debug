@@ -1,0 +1,5 @@
+export enum CapitalCallType {
+  "CAPITAL_CALL" = "CAPITAL_CALL",
+  "DISTRIBUTION" = "DISTRIBUTION",
+  "SUBSCRIPTION" = "SUBSCRIPTION",
+}

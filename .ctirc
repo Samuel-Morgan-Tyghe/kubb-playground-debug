@@ -1,0 +1,45 @@
+{
+  "addNewline": true,
+  "excludes": [
+    "__snapshots__",
+    "@types",
+    "typings",
+    "__test__",
+    "__tests__",
+    "node_modules"
+  ],
+  "fileExcludePatterns": [
+    "*.stories.tsx",
+    "setupTests.tsx",
+    "customClientAxios.ts",
+    "browser.ts"
+  ],
+  "fileFirst": false,
+  "globOptions": {
+    "cwd": "/Users/sam/Documents/GitHub/front-client/packages/vega-core",
+    "dot": true,
+    "ignore": [
+      "*.stories.tsx",
+      "@types/**",
+      "typings/**",
+      "__test__/**",
+      "__tests__/**",
+      "node_modules/**"
+    ],
+    "nonull": true
+  },
+  "includeCWD": true,
+  "output": "index.ts",
+  "quote": "'",
+  "targetExts": [
+    "ts",
+    "tsx"
+  ],
+  "useSemicolon": true,
+  "useTimestamp": false,
+  "verbose": false,
+  "withoutBackupFile": false,
+  "withoutComment": true,
+  "quoteType": "double",
+  "qoute": "\""
+}

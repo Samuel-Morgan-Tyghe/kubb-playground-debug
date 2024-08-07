@@ -1,0 +1,3586 @@
+openapi: 3.0.1
+info:
+  description: Vega backend API documentation
+  title: Vega Backend API
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://vega.investments/license
+servers:
+  - url: https://dev-api.vega.investments/v2
+    description: DEV
+  - url: https://test-api.vega.investments/v2
+    description: TEST
+  - url: https://api.vega.investments/v2
+    description: PROD
+
+
+tags:
+  - name: Actuator
+    description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+security:
+  - BearerAuth: []
+paths:
+
+  "/users":
+    get:
+      tags:
+        - kyc
+      summary: Get a list of all users belonging to an LP
+      operationId: getUsersForLimitedPartner
+      parameters:
+        - name: limitedPartnerId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/ApiResponseUser"
+              example:
+                  data:
+                    - id: "123e4567-e89b-12d3-a456-426614174000"
+                      createdAt: "2023-04-01T12:00:00Z"
+                      updatedAt: "2023-04-01T12:00:00Z"
+                      firstName: "John"
+                      middleName: "Michael"
+                      lastName: "Doe"
+                      email: "john.doe@example.com"
+                      phone: "+1234567890"
+                      ownerId: "987e6543-e21b-12d3-a456-426614174000"
+                      gender: "MALE"
+                      ownerType: "LIMITED_PARTNER"
+                    - id: "456e7890-e89b-12d3-a456-426614174001"
+                      createdAt: "2023-04-02T10:30:00Z"
+                      updatedAt: "2023-04-02T10:30:00Z"
+                      firstName: "Jane"
+                      middleName: "Elizabeth"
+                      lastName: "Smith"
+                      email: "jane.smith@example.com"
+                      phone: "+1987654321"
+                      ownerId: "987e6543-e21b-12d3-a456-426614174000"
+                      gender: "FEMALE"
+                      ownerType: "LIMITED_PARTNER"
+                  meta: {}
+                  errors: {}
+
+
+    post:
+      summary: Create a user
+      tags:
+        - kyc
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+            example:
+              firstName: "Alice"
+              middleName: "Marie"
+              lastName: "Johnson"
+              email: "alice.johnson@example.com"
+              phone: "+1122334455"
+              ownerId: "789e0123-e21b-12d3-a456-426614174000"
+              gender: "FEMALE"
+              ownerType: "LIMITED_PARTNER"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseUser"
+              example:
+                data:
+                  id: "789e0123-e89b-12d3-a456-426614174002"
+                  createdAt: "2023-04-03T09:15:00Z"
+                  updatedAt: "2023-04-03T09:15:00Z"
+                  firstName: "Alice"
+                  middleName: "Marie"
+                  lastName: "Johnson"
+                  email: "alice.johnson@example.com"
+                  phone: "+1122334455"
+                  ownerId: "789e0123-e21b-12d3-a456-426614174000"
+                  gender: "FEMALE"
+                  ownerType: "LIMITED_PARTNER"
+                meta: {}
+                errors: {}
+
+
+  "/users/{userId}":
+    get:
+      tags:
+        - kyc
+      summary: Get a specific user
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseUser"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  createdAt: "2023-04-01T12:00:00Z"
+                  updatedAt: "2023-04-01T12:00:00Z"
+                  firstName: "John"
+                  middleName: "Michael"
+                  lastName: "Doe"
+                  email: "john.doe@example.com"
+                  phone: "+1234567890"
+                  ownerId: "987e6543-e21b-12d3-a456-426614174000"
+                  gender: "MALE"
+                  ownerType: "LIMITED_PARTNER"
+                meta: {}
+                errors: {}
+
+    patch:
+      summary: Update the details of a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      tags:
+        - kyc
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+            example:
+              firstName: "John"
+              middleName: "William"
+              lastName: "Doe"
+              email: "john.w.doe@example.com"
+              phone: "+1234567890"
+              ownerId: "987e6543-e21b-12d3-a456-426614174000"
+              gender: "MALE"
+              ownerType: "LIMITED_PARTNER"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseUser"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  createdAt: "2023-04-01T12:00:00Z"
+                  updatedAt: "2023-04-02T14:30:00Z"
+                  firstName: "John"
+                  middleName: "William"
+                  lastName: "Doe"
+                  email: "john.w.doe@example.com"
+                  phone: "+1234567890"
+                  ownerId: "987e6543-e21b-12d3-a456-426614174000"
+                  gender: "MALE"
+                  ownerType: "LIMITED_PARTNER"
+                meta: {}
+                errors: {}
+
+  "/general-partners":
+    post:
+      summary: Create new general-partner
+      tags:
+        - kyc
+      operationId: createGeneralPartner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGeneralPartnerRequest"
+            example:
+              name: "Example General Partner LLC"
+              email: "contact@examplegp.com"
+              phone: "+1234567890"
+              privacyPolicy: "https://examplegp.com/privacy"
+              riskWarning: "https://examplegp.com/risk"
+              termsAndConditions: "https://examplegp.com/terms"
+              logoDark: "https://examplegp.com/logo-dark.png"
+              smallLogoDark: "https://examplegp.com/small-logo-dark.png"
+              logoLight: "https://examplegp.com/logo-light.png"
+              smallLogoLight: "https://examplegp.com/small-logo-light.png"
+              smallLogo: "https://examplegp.com/small-logo.png"
+              primaryColour: "#007BFF"
+              borderRadius: "4px"
+              defaultMode: "LIGHT"
+              footerText: "© 2023 Example General Partner LLC"
+              currency: "USD"
+              isThemeToggleVisible: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseGeneralPartner"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  name: "Example General Partner LLC"
+                meta: {}
+                errors: {}
+
+  "/general-partners/{generalPartnerId}":
+    get:
+      tags:
+        - kyc
+      operationId: getGeneralPartnerById
+      parameters:
+        - name: generalPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      summary: Get a general-partner by its id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseGeneralPartner"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  name: "Example General Partner LLC"
+                meta: {}
+                errors: {}
+
+    patch:
+      summary: Update the details of a general-partner
+      parameters:
+        - name: generalPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      tags:
+        - kyc
+      operationId: updateGeneralPartner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GeneralPartnerUpdateRequest"
+            example:
+              name: "Updated General Partner LLC"
+              email: "updated@examplegp.com"
+              phone: "+1987654321"
+              privacyPolicy: "https://updatedgp.com/privacy"
+              riskWarning: "https://updatedgp.com/risk"
+              termsAndConditions: "https://updatedgp.com/terms"
+              logoDark: "https://updatedgp.com/logo-dark.png"
+              smallLogoDark: "https://updatedgp.com/small-logo-dark.png"
+              logoLight: "https://updatedgp.com/logo-light.png"
+              smallLogoLight: "https://updatedgp.com/small-logo-light.png"
+              smallLogo: "https://updatedgp.com/small-logo.png"
+              primaryColour: "#FF5733"
+              borderRadius: "8px"
+              defaultMode: "DARK"
+              footerText: "© 2023 Updated General Partner LLC"
+              currency: "EUR"
+              isThemeToggleVisible: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseGeneralPartner"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  name: "Updated General Partner LLC"
+                meta: {}
+                errors: {}
+
+  "/limited-partners":
+    get:
+      tags:
+        - kyc
+      operationId: getLimitedPartners
+      parameters:
+        - name: generalPartnerId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "987e6543-e21b-12d3-a456-426614174000"
+      summary: Get all the limited-partners of a general-partner by id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/ApiResponseLimitedPartner"
+              example:
+                data:
+                    - id: "123e4567-e89b-12d3-a456-426614174000"
+                      generalPartnerId: "987e6543-e21b-12d3-a456-426614174000"
+                      name: "Example Limited Partner LLC"
+                      limitedPartnerStatus: "ACTIVE"
+                    - id: "456e7890-e89b-12d3-a456-426614174001"
+                      generalPartnerId: "987e6543-e21b-12d3-a456-426614174000"
+                      name: "Another Limited Partner Inc."
+                      limitedPartnerStatus: "CREATED"
+                meta: {}
+                errors: {}
+
+    post:
+      summary: Create a limited partner
+      tags:
+        - kyc
+      operationId: createLimitedPartner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLimitedPartnerRequest"
+            example:
+              userId: "456e7890-e89b-12d3-a456-426614174001"
+              profileId: "456e7890-e89b-12d3-a456-426614174001"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseLimitedPartner"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  generalPartnerId: "987e6543-e21b-12d3-a456-426614174000"
+                  name: "New Limited Partner LLC"
+                  limitedPartnerStatus: "CREATED"
+                meta: {}
+                errors: {}
+
+  "/limited-partners/{limitedPartnerId}":
+    get:
+      tags:
+        - kyc
+      operationId: getLimitedPartnerById
+      parameters:
+        - name: limitedPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      summary: Get a limitedPartner by its id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseLimitedPartner"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  generalPartnerId: "987e6543-e21b-12d3-a456-426614174000"
+                  name: "Example Limited Partner LLC"
+                  limitedPartnerStatus: "ACTIVE"
+                meta: {}
+                errors: {}
+
+    patch:
+      summary: Update the details of an limitedPartner
+      parameters:
+        - name: limitedPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      tags:
+        - kyc
+      operationId: updateLimitedPartner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLimitedPartnerRequest"
+            example:
+              minimumInvestment: 100000
+              id: "123e4567-e89b-12d3-a456-426614174000"
+              advisorId: "456e7890-e89b-12d3-a456-426614174001"
+              userId: "789e0123-e89b-12d3-a456-426614174002"
+              groupId: "14fbb845-a224-4b5a-8a5e-df2b5e559ffa"
+              onfidoApplicantId: "14fbb845-a224-4b5a-8a5e-df2b5e559ffa"
+              profileId: "14fbb845-a224-4b5a-8a5e-df2b5e559ffa"
+              onboardingFlowId: "14fbb845-a224-4b5a-8a5e-df2b5e559ffa"
+              type: "individual"
+              status: "INVITATION_SENT"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseLimitedPartner"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  generalPartnerId: "987e6543-e21b-12d3-a456-426614174000"
+                  name: "Updated Limited Partner LLC"
+                  limitedPartnerStatus: "ACTIVE"
+                meta: {}
+                errors: {}
+                #undManagement Module
+  "/assets":
+    post:
+      summary: Create a new asset
+      tags:
+        - fund-management
+      operationId: createAsset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BaseAsset"
+            example:
+              id: "789e0123-e89b-12d3-a456-426614174000"
+              isin: "US0378331005"
+              name: "Example Asset"
+              shortName: "EX Asset"
+              type: "DRAWDOWN"
+              assetStrategy: "CREDIT"
+              assetClass: "CORPORATE_CREDIT"
+              status: "CREATED"
+              currency: "USD"
+              counterPartyId: "456e7890-e21b-12d3-a456-426614174000"
+              minimumInvestment: 100000
+              closingDate: "2023-12-31T23:59:59Z"
+              description: "A prime commercial property in downtown area"
+              longDescription: "This is a detailed description of the Example Asset, a prime commercial property located in the heart of the downtown area."
+              logoUrl: "https://example.com/logo.png"
+              smallLogoUrl: "https://example.com/small-logo.png"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseAsset"
+              example:
+                data:
+                  id: "789e0123-e89b-12d3-a456-426614174000"
+                  isin: "US0378331005"
+                  name: "Example Asset"
+                  shortName: "EX Asset"
+                  type: "DRAWDOWN"
+                  assetStrategy: "CREDIT"
+                  assetClass: "CORPORATE_CREDIT"
+                  status: "CREATED"
+                  currency: "USD"
+                  counterPartyId: "456e7890-e21b-12d3-a456-426614174000"
+                  minimumInvestment: 100000
+                  closingDate: "2023-12-31T23:59:59Z"
+                  description: "A prime commercial property in downtown area"
+                  longDescription: "This is a detailed description of the Example Asset, a prime commercial property located in the heart of the downtown area."
+                  logoUrl: "https://example.com/logo.png"
+                  smallLogoUrl: "https://example.com/small-logo.png"
+                meta: {}
+                errors: {}
+
+  "/assets/{assetId}":
+    get:
+      summary: Get a new asset by id
+      tags:
+        - fund-management
+      operationId: getAssetById
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "789e0123-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseAsset"
+              example:
+                data:
+                  id: "789e0123-e89b-12d3-a456-426614174000"
+                  isin: "US0378331005"
+                  name: "Example Asset"
+                  shortName: "EX Asset"
+                  type: "DRAWDOWN"
+                  assetStrategy: "CREDIT"
+                  assetClass: "CORPORATE_CREDIT"
+                  status: "CREATED"
+                  currency: "USD"
+                  counterPartyId: "456e7890-e21b-12d3-a456-426614174000"
+                  minimumInvestment: 100000
+                  closingDate: "2023-12-31T23:59:59Z"
+                  description: "A prime commercial property in downtown area"
+                  longDescription: "This is a detailed description of the Example Asset, a prime commercial property located in the heart of the downtown area."
+                  logoUrl: "https://example.com/logo.png"
+                  smallLogoUrl: "https://example.com/small-logo.png"
+                meta: {}
+                errors: {}
+
+    patch:
+      summary: Update the details of an asset
+      tags:
+        - fund-management
+      operationId: updateAsset
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "789e0123-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAssetRequest"
+            example:
+              name: "Updated Asset Name"
+              shortName: "UAN"
+              type: "DRAWDOWN"
+              assetStrategy: "UNKNOWN"
+              assetClass: "NAV"
+              status: "OPEN"
+              currency: "USD"
+              counterPartyId: "456e7890-e21b-12d3-a456-426614174000"
+              minimumInvestment: 150000
+              closingDate: "2024-06-30T23:59:59Z"
+              description: "An updated description for the prime commercial property"
+              longDescription: "This is a detailed updated description of the asset, highlighting its key features and investment potential."
+              logoUrl: "https://example.com/updated-logo.png"
+              smallLogoUrl: "https://example.com/updated-small-logo.png"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseAsset"
+              example:
+                data:
+                  id: "789e0123-e89b-12d3-a456-426614174000"
+                  isin: "US0378331005"
+                  name: "Updated Asset Name"
+                  shortName: "EX Asset"
+                  type: "DRAWDOWN"
+                  assetStrategy: "CREDIT"
+                  assetClass: "CORPORATE_CREDIT"
+                  status: "OPEN"
+                  currency: "USD"
+                  counterPartyId: "456e7890-e21b-12d3-a456-426614174000"
+                  minimumInvestment: 100000
+                  closingDate: "2023-12-31T23:59:59Z"
+                  description: "An updated description for the prime commercial property"
+                  longDescription: "This is a detailed description of the Updated Asset Name, a prime commercial property located in the heart of the downtown area."
+                  logoUrl: "https://example.com/logo.png"
+                  smallLogoUrl: "https://example.com/small-logo.png"
+                meta: {}
+                errors: {}
+
+  "/assets/{assetId}/valuations":
+    get:
+      summary: Retrieves a single asset's valuations sorted by date
+      tags:
+        - fund-management
+      operationId: getAssetValuations
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "789e0123-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/ApiResponseAssetValuation"
+                  example:
+                    data:
+                      - id: "123e4567-e89b-12d3-a456-426614174000"
+                        valuation:
+                          amount: 1000000.00
+                          currency: "USD"
+                        asOf: "2023-05-01T00:00:00Z"
+                        assetId: "789e0123-e89b-12d3-a456-426614174000"
+                        source: "FUND_ADMIN"
+                        assetValuationType: "NAV"
+                      - id: "456e7890-e89b-12d3-a456-426614174001"
+                        valuation:
+                          amount: 1050000.00
+                          currency: "USD"
+                        asOf: "2023-06-01T00:00:00Z"
+                        assetId: "789e0123-e89b-12d3-a456-426614174000"
+                        source: "FUND_ADMIN"
+                        assetValuationType: "NAV"
+                    meta: {}
+                    errors: {}
+
+    post:
+      summary: Create a new valuation for an asset
+      tags:
+        - fund-management
+      operationId: createAssetValuation
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "789e0123-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetValuationRequest"
+            example:
+              value: 1200000.00
+              currency: "USD"
+              asOf: "2023-08-01T00:00:00Z"
+              source: "FUND_ADMIN"
+              assetValuationType: "NAV"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseAssetValuation"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  valuation:
+                    amount: 1100000.00
+                    currency: "USD"
+                  asOf: "2023-07-01T00:00:00Z"
+                  assetId: "789e0123-e89b-12d3-a456-426614174000"
+                  source: "FUND_ADMIN"
+                  assetValuationType: "NAV"
+                meta: {}
+                errors: {}
+
+  "/assets/{assetId}/fund-admins":
+    get:
+      summary: Get a single asset's admin
+      tags:
+        - fund-management
+      operationId: getFundAdminByAssetId
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "789e0123-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/ApiResponseFundAdmin"
+                  example:
+                    data:
+                      - id: "123e4567-e89b-12d3-a456-426614174000"
+                        name: "Example Fund Admin LLC"
+                        contactEmail: "admin@examplefundadmin.com"
+                        contactPhone: "+1234567890"
+                        assetId: "987e6543-e21b-12d3-a456-426614174000"
+                      - id: "456e7890-e89b-12d3-a456-426614174001"
+                        name: "Another Fund Admin Inc."
+                        contactEmail: "contact@anotherfundadmin.com"
+                        contactPhone: "+1987654321"
+                        assetId: "987e6543-e21b-12d3-a456-426614174000"
+                    meta: {}
+                    errors: {}
+
+    post:
+      summary: Create a new fund-admin for an asset
+      tags:
+        - fund-management
+      operationId: createAdminForAsset
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "987e6543-e21b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FundAdminRequest"
+            example:
+              name: "New Fund Admin Corp."
+              contactEmail: "info@newfundadmin.com"
+              contactPhone: "+1122334455"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseFundAdmin"
+              example:
+                data:
+                  id: "789f0123-e89b-12d3-a456-426614174002"
+                  name: "New Fund Admin Corp."
+                  contactEmail: "info@newfundadmin.com"
+                  contactPhone: "+1122334455"
+                  assetId: "987e6543-e21b-12d3-a456-426614174000"
+                meta: {}
+                errors: {}
+
+    patch:
+      summary: Update the details of an fund-admin
+      tags:
+        - fund-management
+      operationId: updateAdminForAsset
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "987e6543-e21b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateFundAdminRequest"
+            example:
+              id: "789f0123-e89b-12d3-a456-426614174002"
+              firstName: "Jane"
+              lastName: "Doe"
+              resourceId: "resource-123"
+              description: "Updated fund admin details"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseFundAdmin"
+              example:
+                data:
+                  id: "789f0123-e89b-12d3-a456-426614174002"
+                  name: "Updated Fund Admin Corp."
+                  contactEmail: "updated@newfundadmin.com"
+                  contactPhone: "+1987654321"
+                  assetId: "987e6543-e21b-12d3-a456-426614174000"
+                meta: {}
+                errors: {}
+
+  #undActions Module
+
+  "/capital-calls":
+    get:
+      summary: Get all capital calls or distributions for an asset
+
+      tags:
+        - capital-calls
+      operationId: getCapitalCallsForAsset
+      parameters:
+        - name: assetId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "987e6543-e21b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/ApiResponseCapitalCall"
+                  example:
+                    data:
+                      - id: "123e4567-e89b-12d3-a456-426614174000"
+                        assetId: "987e6543-e21b-12d3-a456-426614174000"
+                        type: "CAPITAL_CALL"
+                        amount: 1000000
+                        amountType: "AMOUNT"
+                        dueDate: "2023-08-15T00:00:00Z"
+                        status: "PENDING"
+                      - id: "456e7890-e89b-12d3-a456-426614174001"
+                        assetId: "987e6543-e21b-12d3-a456-426614174000"
+                        type: "CAPITAL_CALL"
+                        amount: 500000
+                        amountType: "AMOUNT"
+                        dueDate: "2023-09-01T00:00:00Z"
+                        status: "COMPLETED"
+                    meta: {}
+                    errors: {}
+
+    post:
+      summary: Create a capital call or distributions for an asset
+      tags:
+        - capital-calls
+      operationId: createCapitalCall
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CapitalCallCreateRequest"
+            example:
+              assetId: "987e6543-e21b-12d3-a456-426614174000"
+              type: "CAPITAL_CALL"
+              amount: 1000000
+              amountType: "AMOUNT"
+              dueDate: "2023-08-15T00:00:00Z"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseCapitalCall"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  assetId: "987e6543-e21b-12d3-a456-426614174000"
+                  type: "CAPITAL_CALL"
+                  amount: 1000000
+                  amountType: "AMOUNT"
+                  dueDate: "2023-08-15T00:00:00Z"
+                  status: "PENDING"
+                meta: {}
+                errors: {}
+
+  "/capital-calls/{capitalCallId}":
+    get:
+      summary: Retrieve a single capital call or distribution
+      tags:
+        - capital-calls
+      operationId: getCapitalCallById
+      parameters:
+        - name: capitalCallId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseCapitalCall"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  assetId: "987e6543-e21b-12d3-a456-426614174000"
+                  type: "CAPITAL_CALL"
+                  amount: 1000000
+                  amountType: "AMOUNT"
+                  dueDate: "2023-08-15T00:00:00Z"
+                  status: "PENDING"
+                meta: {}
+                errors: {}
+
+    patch:
+      summary: Update a capital call or distributions for an asset
+      tags:
+        - capital-calls
+      operationId: updateCapitalCall
+      parameters:
+        - name: capitalCallId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CapitalCallUpdateRequest"
+            example:
+              amount: 1500000
+              amountType: "AMOUNT"
+              dueDate: "2023-09-30T00:00:00Z"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseCapitalCall"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  assetId: "987e6543-e21b-12d3-a456-426614174000"
+                  type: "CAPITAL_CALL"
+                  amount: 1500000
+                  amountType: "AMOUNT"
+                  dueDate: "2023-09-30T00:00:00Z"
+                  status: "PENDING"
+                meta: {}
+                errors: {}
+
+
+  "/capital-call-invoices":
+    get:
+      summary: Get all capital-call-invoices or distribution-invoices
+      tags:
+        - capital-call-invoices
+      operationId: getCapitalCallInvoices
+      parameters:
+        - name: assetId
+          in: query
+          schema:
+            type: string
+          example: "987e6543-e21b-12d3-a456-426614174000"
+        - name: capitalCallId
+          in: query
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        - name: counterpartyId
+          in: query
+          schema:
+            type: string
+          example: "456a7890-b12c-34d5-e678-901234567890"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/ApiResponseCapitalCallInvoice"
+              example:
+                  data:
+                    - id: "789f0123-e89b-12d3-a456-426614174002"
+                      capitalCallId: "456e7890-e89b-12d3-a456-426614174001"
+                      subscriptionId: "123e4567-e89b-12d3-a456-426614174003"
+                      amount: 100000
+                      status: "AMOUNT"
+                      paymentReference: "REF123456"
+                    - id: "14fbb845-a224-4b5a-8a5e-df2b5e559ffa"
+                      capitalCallId: "456e7890-e89b-12d3-a456-426614174001"
+                      subscriptionId: "234f5678-f90a-34b5-c678-648725285114"
+                      amount: 150000
+                      status: "AMOUNT"
+                      paymentReference: "REF789012"
+                  meta: {}
+                  errors: {}
+
+  "/capital-call-invoices/{capitalCallInvoiceId}":
+    get:
+      summary: Retrieve a single capital call or distribution invoice
+      tags:
+        - capital-call-invoices
+      operationId: getCapitalCallInvoiceById
+      parameters:
+        - name: capitalCallInvoiceId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "789f0123-e89b-12d3-a456-426614174002"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseCapitalCallInvoice"
+              example:
+                data:
+                  id: "789f0123-e89b-12d3-a456-426614174002"
+                  capitalCallId: "456e7890-e89b-12d3-a456-426614174001"
+                  subscriptionId: "123e4567-e89b-12d3-a456-426614174003"
+                  amount: 100000
+                  status: "AMOUNT"
+                  paymentReference: "REF123456"
+                meta: {}
+                errors: {}
+
+    patch:
+      summary: Update a capital call invoice or distribution invoice
+      tags:
+        - capital-call-invoices
+      operationId: updateCapitalCallInvoice
+      parameters:
+        - name: capitalCallInvoiceId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "789f0123-e89b-12d3-a456-426614174002"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CapitalCallInvoiceUpdateRequest"
+            example:
+              status: "AMOUNT"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseCapitalCallInvoice"
+              example:
+                data:
+                  id: "789f0123-e89b-12d3-a456-426614174002"
+                  capitalCallId: "456e7890-e89b-12d3-a456-426614174001"
+                  subscriptionId: "123e4567-e89b-12d3-a456-426614174003"
+                  amount: 100000
+                  status: "AMOUNT"
+                  paymentReference: "REF123456"
+                meta: {}
+                errors: {}
+
+  "/subscriptions":
+    get:
+      summary: Get all subscriptions for assetId or counterpartyId
+      tags:
+        - subscriptions
+      operationId: getAllSubscriptions
+      parameters:
+        - name: assetId
+          in: query
+          schema:
+            type: string
+          example: "987e6543-e21b-12d3-a456-426614174000"
+        - name: counterpartyId
+          in: query
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/ApiResponseSubscription"
+                  example:
+                    data:
+                      - id: "789f0123-e89b-12d3-a456-426614174002"
+                        assetId: "987e6543-e21b-12d3-a456-426614174000"
+                        counterpartyId: "123e4567-e89b-12d3-a456-426614174000"
+                        commitmentAmount: 100000.00
+                        status: "PENDING"
+                      - id: "456e7890-e89b-12d3-a456-426614174001"
+                        assetId: "987e6543-e21b-12d3-a456-426614174000"
+                        counterpartyId: "234f5678-e89b-12d3-a456-426614174000"
+                        commitmentAmount: 75000.00
+                        status: "PENDING"
+                    meta: {}
+                    errors: {}
+
+    post:
+      summary: Create a new subscription
+      tags:
+        - subscriptions
+      operationId: createSubscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionCreateRequest"
+            example:
+              assetId: "987e6543-e21b-12d3-a456-426614174000"
+              counterpartyId: "123e4567-e89b-12d3-a456-426614174000"
+              amount: 100000.00
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseSubscription"
+              example:
+                data:
+                  id: "789f0123-e89b-12d3-a456-426614174002"
+                  assetId: "987e6543-e21b-12d3-a456-426614174000"
+                  counterpartyId: "123e4567-e89b-12d3-a456-426614174000"
+                  commitmentAmount: 100000.00
+                  status: "PENDING"
+                meta: {}
+                errors: {}
+
+
+  "/subscriptions/{subscriptionId}":
+    get:
+      summary: Retrieve a single subscription
+      tags:
+        - subscriptions
+      operationId: getSubscriptionById
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "789f0123-e89b-12d3-a456-426614174002"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseSubscription"
+              example:
+                data:
+                  id: "789f0123-e89b-12d3-a456-426614174002"
+                  assetId: "987e6543-e21b-12d3-a456-426614174000"
+                  counterpartyId: "123e4567-e89b-12d3-a456-426614174000"
+                  commitmentAmount: 100000.00
+                  status: "PENDING"
+                meta: {}
+                errors: {}
+
+
+    patch:
+      summary: Update a subscription
+      tags:
+        - subscriptions
+      operationId: updateSubscription
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "789f0123-e89b-12d3-a456-426614174002"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionUpdateRequest"
+            example:
+              amount: 150000.00
+              status: "CREATED"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseSubscription"
+              example:
+                data:
+                  id: "789f0123-e89b-12d3-a456-426614174002"
+                  assetId: "987e6543-e21b-12d3-a456-426614174000"
+                  counterpartyId: "123e4567-e89b-12d3-a456-426614174000"
+                  commitmentAmount: 150000.00
+                  status: "CREATED"
+                meta: {}
+                errors: {}
+
+
+
+  "/transactions":
+    get:
+      summary: Fetches all transactions for a counterparty
+      tags:
+        - transactions
+      operationId: getTransactions
+      parameters:
+        - name: counterpartyId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/ApiResponseTransaction"
+                  example:
+                    data:
+                      - id: "01468693-a3bd-4553-ad4c-672bbf7e9fb2"
+                        amount:
+                          amount: 10000.00
+                          currency: USD
+                        assetId: "456e7890-e89b-12d3-a456-426614174001"
+                        description: "Payment for services rendered"
+                        postedAt: "2023-05-15T14:30:00Z"
+                        fromCounterpartyId: "456e7890-e89b-12d3-a456-426614174001"
+                        toCounterpartyId: "216da497-2351-43b2-9ae0-b44d3d51da60"
+                        type: "INVESTMENT"
+                        status: "COMPLETED"
+                        externalRef: "INV-2023-001"
+                        groupId: "456e7890-e89b-12d3-a456-426614174001"
+                      - id: "216da497-2351-43b2-9ae0-b44d3d51da60"
+                        amount:
+                          amount: 5000.00
+                          currency: EUR
+                        assetId: "567f8901-e89b-12d3-a456-426614174002"
+                        description: "Withdrawal request"
+                        postedAt: "2023-05-16T10:15:00Z"
+                        fromCounterpartyId: "567f8901-e89b-12d3-a456-426614174002"
+                        toCounterpartyId: "216da497-2351-43b2-9ae0-b44d3d51da60"
+                        type: "INVESTMENT"
+                        status: "PENDING"
+                        externalRef: "WD-2023-002"
+                        groupId: "567f8901-e89b-12d3-a456-426614174002"
+                    meta: {}
+                    errors: {}
+
+
+    post:
+      summary: Creates a new transaction
+      tags:
+        - transactions
+      operationId: createTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionRequest"
+            example:
+              bankAccountId: "456e7890-e89b-12d3-a456-426614174001"
+              limitedPartnerId: "123e4567-e89b-12d3-a456-426614174000"
+              transactionType: "INVESTMENT"
+              groupId: "456e7890-e89b-12d3-a456-426614174001"
+              fromAccountId: "123e4567-e89b-12d3-a456-426614174002"
+              toAccountId: "123e4567-e89b-12d3-a456-426614174003"
+              amount:
+                amount: 10000.00
+                currency: USD
+              validTransfer: true
+              validWithdrawal: false
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseTransaction"
+              example:
+                data:
+                  id: "01468693-a3bd-4553-ad4c-672bbf7e9fb2"
+                  amount:
+                    amount: 10000.00
+                    currency: USD
+                  assetId: "456e7890-e89b-12d3-a456-426614174001"
+                  description: "Investment deposit"
+                  postedAt: "2023-05-17T09:30:00Z"
+                  fromCounterpartyId: "123e4567-e89b-12d3-a456-426614174000"
+                  toCounterpartyId: "456e7890-e89b-12d3-a456-426614174001"
+                  type: "INVESTMENT"
+                  status: "COMPLETED"
+                  externalRef: "INV-2023-003"
+                  groupId: "456e7890-e89b-12d3-a456-426614174001"
+                meta: {}
+                errors: {}
+
+
+  "/transactions/{transactionId}":
+    get:
+      summary: Fetches a transaction
+      tags:
+        - transactions
+      operationId: getTransactionById
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseTransaction"
+              example:
+                data:
+                  id: "01468693-a3bd-4553-ad4c-672bbf7e9fb2"
+                  amount:
+                    amount: 10000.00
+                    currency: USD
+                  assetId: "456e7890-e89b-12d3-a456-426614174001"
+                  description: "Investment deposit"
+                  postedAt: "2023-05-17T09:30:00Z"
+                  fromCounterpartyId: "123e4567-e89b-12d3-a456-426614174000"
+                  toCounterpartyId: "456e7890-e89b-12d3-a456-426614174001"
+                  type: "INVESTMENT"
+                  status: "COMPLETED"
+                  externalRef: "INV-2023-003"
+                  groupId: "456e7890-e89b-12d3-a456-426614174001"
+                meta: {}
+                errors: {}
+
+
+    patch:
+      summary: Updates a transaction's details
+      tags:
+        - transactions
+      operationId: updateTransaction
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionUpdateRequest"
+            example:
+              amount:
+                amount: 10000.00
+                currency: USD
+              status: "COMPLETED"
+              description: "Updated investment deposit"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseTransaction"
+              example:
+                data:
+                  id: "01468693-a3bd-4553-ad4c-672bbf7e9fb2"
+                  amount:
+                    amount: 10000.00
+                    currency: USD
+                  assetId: "456e7890-e89b-12d3-a456-426614174001"
+                  description: "Updated investment deposit"
+                  postedAt: "2023-05-17T09:30:00Z"
+                  fromCounterpartyId: "123e4567-e89b-12d3-a456-426614174000"
+                  toCounterpartyId: "456e7890-e89b-12d3-a456-426614174001"
+                  type: "INVESTMENT"
+                  status: "COMPLETED"
+                  externalRef: "INV-2023-003"
+                  groupId: "456e7890-e89b-12d3-a456-426614174001"
+                meta: {}
+                errors: {}
+
+
+  "/counterparties":
+    post:
+      summary: Creates a new counterparty to allow trading
+      tags:
+        - counterparties
+      operationId: createCounterparty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CounterpartyCreateRequest"
+            example:
+              name: "Example Counterparty Ltd."
+              currency: "USD"
+              ownerId: "550e8400-e29b-41d4-a716-446655440000"
+              ownerType: "LIMITED_PARTNER"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseCounterparty"
+              example:
+                data:
+                  name: "Example Counterparty Ltd."
+                  currency: "USD"
+                  ownerId: "550e8400-e29b-41d4-a716-446655440000"
+                  ownerType: "LIMITED_PARTNER"
+                  status: "ACTIVE"
+                meta: {}
+                errors: {}
+
+  "/counterparties/{counterpartyId}":
+    get:
+      summary: Fetches details of a counterparty
+      tags:
+        - counterparties
+      operationId: getCounterpartyById
+      parameters:
+        - name: counterpartyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseCounterparty"
+              example:
+                data:
+                  name: "Example Counterparty Ltd."
+                  currency: "USD"
+                  ownerId: "550e8400-e29b-41d4-a716-446655440000"
+                  ownerType: "LIMITED_PARTNER"
+                  status: "ACTIVE"
+                meta: {}
+                errors: {}
+
+
+    patch:
+      summary: Updates the information of a counterparty
+      tags:
+        - counterparties
+      operationId: updateCounterparty
+      parameters:
+        - name: counterpartyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CounterpartyUpdateRequest"
+            example:
+              name: "Updated Counterparty Ltd."
+              status: "ACTIVE"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseCounterparty"
+              example:
+                data:
+                  name: "Updated Counterparty Ltd."
+                  currency: "USD"
+                  ownerId: "550e8400-e29b-41d4-a716-446655440000"
+                  ownerType: "LIMITED_PARTNER"
+                  status: "ACTIVE"
+                meta: {}
+                errors: {}
+
+
+  "/bank-accounts":
+    post:
+      summary: Create a new bank account
+      tags:
+        - bank-accounts
+      operationId: createBankAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BankAccountRequest"
+            example:
+              bankId: "123e4567-e89b-12d3-a456-426614174000"
+              type: "DOMESTIC"
+              accountType: "business"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseBankAccount"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  limitedPartnerId: "123e4567-e89b-12d3-a456-426614174001"
+                  bankId: "123e4567-e89b-12d3-a456-426614174002"
+                  accountHolder: "John Doe"
+                  accountNumber: "1234567890"
+                  sortCode: "123456"
+                  iban: "GB29NWBK60161331926819"
+                  swiftCode: "NWBKGB2L"
+                  type: "DOMESTIC"
+                  accountType: "business"
+                meta: {}
+                errors: {}
+
+
+  "/bank-accounts/{bankAccountId}":
+    get:
+      summary: Get the details of a bank account
+      tags:
+        - bank-accounts
+      operationId: getBankAccountById
+      parameters:
+        - name: bankAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseBankAccount"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  limitedPartnerId: "456e7890-e89b-12d3-a456-426614174001"
+                  bankId: "789a1234-e89b-12d3-a456-426614174002"
+                  accountHolder: "John Doe"
+                  accountNumber: "1234567890"
+                  sortCode: "123456"
+                  iban: "GB29NWBK60161331926819"
+                  swiftCode: "NWBKGB2L"
+                  type: "DOMESTIC"
+                  accountType: "business"
+                meta: {}
+                errors: {}
+
+
+    patch:
+      summary: Updates the information of a bank account
+      tags:
+        - bank-accounts
+      operationId: updateBankAccount
+      parameters:
+        - name: bankAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBankAccountRequest"
+            example:
+              accountNumber: "12345678"
+              sortCode: "123456"
+              iban: "GB29NWBK60161331926819"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseBankAccount"
+              example:
+                data:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  limitedPartnerId: "456e7890-e89b-12d3-a456-426614174001"
+                  bankId: "789a1234-e89b-12d3-a456-426614174002"
+                  accountHolder: "John Doe"
+                  accountNumber: "12345678"
+                  sortCode: "123456"
+                  iban: "GB29NWBK60161331926819"
+                  swiftCode: "NWBKGB2L"
+                  type: "DOMESTIC"
+                  accountType: "business"
+                meta: {}
+                errors: {}
+
+
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    Currency:
+      type: string
+      enum:
+        - GBP
+        - USD
+        - EUR
+        - AUD
+        - JPY
+        - CAD
+        - CNY
+        - CHF
+        - SEK
+        - NZD
+        - MXN
+        - SGD
+        - HKD
+        - NOK
+        - KRW
+        - TRY
+        - INR
+        - RUB
+        - BRL
+        - ZAR
+        - GBX
+        - DKK
+        - PLN
+        - HUF
+        - CZK
+        - HRK
+        - BGN
+        - ISK
+        - RSD
+      example: "USD"
+
+    Gender:
+      type: string
+      enum:
+        - MALE
+        - FEMALE
+        - OTHER
+      example: "MALE"
+
+    OwnerType:
+      type: string
+      enum:
+        - LIMITED_PARTNER
+        - GENERAL_PARTNER
+      example: "LIMITED_PARTNER"
+
+    DefaultMode:
+      type: string
+      enum:
+        - LIGHT
+        - DARK
+      example: "LIGHT"
+
+
+    UserResponse:
+      required:
+        - id
+        - createdAt
+        - updatedAt
+        - firstName
+        - middleName
+        - lastName
+        - email
+        - phone
+        - ownerId
+        - gender
+        - ownerType
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2023-06-07T14:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-06-07T15:45:00Z"
+        deletedAt:
+          type: string
+          format: date-time
+          example: "2023-06-07T15:45:00Z"
+        firstName:
+          type: string
+          example: "John"
+        middleName:
+          type: string
+          example: "Michael"
+        lastName:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+        phone:
+          type: string
+          example: "+1234567890"
+        ownerId:
+          type: string
+          format: uuid
+          example: "987e6543-e21b-12d3-a456-426614174000"
+        gender:
+          $ref: "#/components/schemas/Gender"
+        ownerType:
+          $ref: "#/components/schemas/OwnerType"
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        createdAt: "2023-06-07T14:30:00Z"
+        updatedAt: "2023-06-07T15:45:00Z"
+        deletedAt: "2023-06-07T16:00:00Z"
+        firstName: "John"
+        middleName: "Michael"
+        lastName: "Doe"
+        email: "john.doe@example.com"
+        phone: "+1234567890"
+        ownerId: "987e6543-e21b-12d3-a456-426614174000"
+        gender: "MALE"
+        ownerType: "LIMITED_PARTNER"
+
+    CreateUserRequest:
+      type: object
+      required:
+        - firstName
+        - middleName
+        - lastName
+        - email
+        - phone
+        - ownerId
+        - gender
+        - ownerType
+      properties:
+        firstName:
+          type: string
+          example: "John"
+        middleName:
+          type: string
+          example: "Michael"
+        lastName:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+        phone:
+          type: string
+          example: "+1234567890"
+        ownerId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        gender:
+          $ref: "#/components/schemas/Gender"
+        ownerType:
+          $ref: "#/components/schemas/OwnerType"
+      example:
+        firstName: "Alice"
+        middleName: "Marie"
+        lastName: "Johnson"
+        email: "alice.johnson@example.com"
+        phone: "+1122334455"
+        ownerId: "789e0123-e21b-12d3-a456-426614174000"
+        gender: "FEMALE"
+        ownerType: "LIMITED_PARTNER"
+
+    CounterpartyCreateRequest:
+      type: object
+      required:
+        - name
+        - currency
+        - ownerId
+        - ownerType
+      properties:
+        name:
+          type: string
+          example: "Example Counterparty"
+        currency:
+          type: string
+          example: "USD"
+        ownerId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        ownerType:
+          "$ref": "#/components/schemas/CounterpartyOwnerType"
+      example:
+        name: "Acme Corporation"
+        currency: "EUR"
+        ownerId: "123e4567-e89b-12d3-a456-426614174000"
+        ownerType: "LIMITED_PARTNER"
+
+    CounterpartyOwnerType:
+      type: string
+      enum:
+        - LIMITED_PARTNER
+        - ASSET
+      example: "LIMITED_PARTNER"
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: "John"
+        middleName:
+          type: string
+          example: "Michael"
+        lastName:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+        phone:
+          type: string
+          example: "+1234567890"
+        ownerId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        gender:
+          $ref: "#/components/schemas/Gender"
+        ownerType:
+          $ref: "#/components/schemas/OwnerType"
+      example:
+        firstName: "Jane"
+        middleName: "Elizabeth"
+        lastName: "Smith"
+        email: "jane.smith@example.com"
+        phone: "+1987654321"
+        ownerId: "123e4567-e89b-12d3-a456-426614174000"
+        gender: "FEMALE"
+        ownerType: "LIMITED_PARTNER"
+
+    GeneralPartnerUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Acme Capital Partners"
+        email:
+          type: string
+          example: "contact@acmecapital.com"
+        phone:
+          type: string
+          example: "+1 (555) 123-4567"
+        privacyPolicy:
+          type: string
+          example: "https://www.acmecapital.com/privacy-policy"
+        riskWarning:
+          type: string
+          example: "Investment involves risks. Past performance is not indicative of future results."
+        termsAndConditions:
+          type: string
+          example: "https://www.acmecapital.com/terms-and-conditions"
+        logoDark:
+          type: string
+          example: "https://assets.acmecapital.com/logo-dark.png"
+        smallLogoDark:
+          type: string
+          example: "https://assets.acmecapital.com/small-logo-dark.png"
+        logoLight:
+          type: string
+          example: "https://assets.acmecapital.com/logo-light.png"
+        smallLogoLight:
+          type: string
+          example: "https://assets.acmecapital.com/small-logo-light.png"
+        smallLogo:
+          type: string
+          example: "https://assets.acmecapital.com/small-logo.png"
+        primaryColour:
+          type: string
+          example: "#007BFF"
+        borderRadius:
+          type: string
+          example: "4px"
+        defaultMode:
+          $ref: "#/components/schemas/DefaultMode"
+        footerText:
+          type: string
+          example: "© 2023 Acme Capital Partners. All rights reserved."
+        currency:
+          $ref: "#/components/schemas/Currency"
+        isThemeToggleVisible:
+          type: boolean
+          example: true
+      example:
+        name: "Acme Capital Partners"
+        email: "contact@acmecapital.com"
+        phone: "+1 (555) 123-4567"
+        privacyPolicy: "https://www.acmecapital.com/privacy-policy"
+        riskWarning: "Investment involves risks. Past performance is not indicative of future results."
+        termsAndConditions: "https://www.acmecapital.com/terms-and-conditions"
+        logoDark: "https://assets.acmecapital.com/logo-dark.png"
+        smallLogoDark: "https://assets.acmecapital.com/small-logo-dark.png"
+        logoLight: "https://assets.acmecapital.com/logo-light.png"
+        smallLogoLight: "https://assets.acmecapital.com/small-logo-light.png"
+        smallLogo: "https://assets.acmecapital.com/small-logo.png"
+        primaryColour: "#007BFF"
+        borderRadius: "4px"
+        defaultMode: "LIGHT"
+        footerText: "© 2023 Acme Capital Partners. All rights reserved."
+        currency: "USD"
+        isThemeToggleVisible: true
+
+    CreateGeneralPartnerRequest:
+      type: object
+      required:
+        - name
+        - email
+        - phone
+        - privacyPolicy
+        - riskWarning
+        - termsAndConditions
+        - logoDark
+        - smallLogoDark
+        - logoLight
+        - smallLogoLight
+        - smallLogo
+        - primaryColour
+        - borderRadius
+        - defaultMode
+        - footerText
+        - currency
+        - isThemeToggleVisible
+      properties:
+        name:
+          type: string
+          example: "Acme Capital Partners"
+        email:
+          type: string
+          example: "contact@acmecapital.com"
+        phone:
+          type: string
+          example: "+1 (555) 123-4567"
+        privacyPolicy:
+          type: string
+          example: "https://www.acmecapital.com/privacy-policy"
+        riskWarning:
+          type: string
+          example: "Investment involves risks. Past performance is not indicative of future results."
+        termsAndConditions:
+          type: string
+          example: "https://www.acmecapital.com/terms-and-conditions"
+        logoDark:
+          type: string
+          example: "https://assets.acmecapital.com/logo-dark.png"
+        smallLogoDark:
+          type: string
+          example: "https://assets.acmecapital.com/small-logo-dark.png"
+        logoLight:
+          type: string
+          example: "https://assets.acmecapital.com/logo-light.png"
+        smallLogoLight:
+          type: string
+          example: "https://assets.acmecapital.com/small-logo-light.png"
+        smallLogo:
+          type: string
+          example: "https://assets.acmecapital.com/small-logo.png"
+        primaryColour:
+          type: string
+          example: "#007BFF"
+        borderRadius:
+          type: string
+          example: "4px"
+        defaultMode:
+          $ref: "#/components/schemas/DefaultMode"
+        footerText:
+          type: string
+          example: "© 2023 Acme Capital Partners. All rights reserved."
+        currency:
+          $ref: "#/components/schemas/Currency"
+        isThemeToggleVisible:
+          type: boolean
+          example: true
+      example:
+        name: "Acme Capital Partners"
+        email: "contact@acmecapital.com"
+        phone: "+1 (555) 123-4567"
+        privacyPolicy: "https://www.acmecapital.com/privacy-policy"
+        riskWarning: "Investment involves risks. Past performance is not indicative of future results."
+        termsAndConditions: "https://www.acmecapital.com/terms-and-conditions"
+        logoDark: "https://assets.acmecapital.com/logo-dark.png"
+        smallLogoDark: "https://assets.acmecapital.com/small-logo-dark.png"
+        logoLight: "https://assets.acmecapital.com/logo-light.png"
+        smallLogoLight: "https://assets.acmecapital.com/small-logo-light.png"
+        smallLogo: "https://assets.acmecapital.com/small-logo.png"
+        primaryColour: "#007BFF"
+        borderRadius: "4px"
+        defaultMode: "LIGHT"
+        footerText: "© 2023 Acme Capital Partners. All rights reserved."
+        currency: "USD"
+        isThemeToggleVisible: true
+
+    CapitalCallStatus:
+      type: string
+      enum:
+        - CREATED
+        - PENDING
+        - ACTIVE
+        - COMPLETED
+      example: "PENDING"
+
+    CapitalCallAmountType:
+      type: string
+      enum:
+        - PERCENTAGE
+        - AMOUNT
+      example: "PERCENTAGE"
+
+    CapitalCallType:
+      type: string
+      enum:
+        - CAPITAL_CALL
+        - DISTRIBUTION
+        - SUBSCRIPTION
+      example: "CAPITAL_CALL"
+
+    CapitalCall:
+      required:
+        - id
+        - assetId
+        - type
+        - amount
+        - amountType
+        - dueDate
+        - status
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        type:
+          $ref: "#/components/schemas/CapitalCallType"
+        status:
+          $ref: "#/components/schemas/CapitalCallStatus"
+        amount:
+          type: number
+          example: 1000000
+        amountType:
+          $ref: "#/components/schemas/CapitalCallAmountType"
+        dueDate:
+          type: string
+          format: date-time
+          example: "2023-12-31T23:59:59Z"
+        assetId:
+          type: string
+          format: uuid
+          example: "14fbb845-a224-4b5a-8a5e-df2b5e559ffa"
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        type: "CAPITAL_CALL"
+        status: "PENDING"
+        amount: 1000000
+        amountType: "AMOUNT"
+        dueDate: "2023-12-31T23:59:59Z"
+        assetId: "14fbb845-a224-4b5a-8a5e-df2b5e559ffa"
+
+
+    GeneralPartner:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          example: "gp-123456"
+        name:
+          type: string
+          example: "Acme Capital Partners"
+      example:
+        id: "gp-789012"
+        name: "Venture Investments LLC"
+
+    CapitalCallCreateRequest:
+      required:
+        - assetId
+        - type
+        - amount
+        - amountType
+        - dueDate
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/CapitalCallType"
+        amount:
+          type: number
+          example: 500000
+        amountType:
+          $ref: "#/components/schemas/CapitalCallAmountType"
+        dueDate:
+          type: string
+          format: date-time
+          example: "2023-09-30T23:59:59Z"
+        assetId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+      example:
+        type: "CAPITAL_CALL"
+        amount: 750000
+        amountType: "PERCENTAGE"
+        dueDate: "2023-11-15T23:59:59Z"
+        assetId: "789e0123-e89b-12d3-a456-426614174002"
+
+    CapitalCallUpdateRequest:
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/CapitalCallType"
+        amount:
+          type: number
+          example: 750000
+        amountType:
+          $ref: "#/components/schemas/CapitalCallAmountType"
+        dueDate:
+          type: string
+          format: date-time
+          example: "2023-10-31T23:59:59Z"
+        assetId:
+          type: string
+          format: uuid
+          example: "789a1234-e89b-12d3-a456-426614174002"
+      example:
+        type: "CAPITAL_CALL"
+        amount: 850000
+        amountType: "AMOUNT"
+        dueDate: "2023-11-30T23:59:59Z"
+        assetId: "123e4567-e89b-12d3-a456-426614174000"
+
+    CapitalCallInvoice:
+      required:
+        - id
+        - capitalCallId
+        - subscriptionId
+        - amount
+        - status
+        - paymentReference
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        capitalCallId:
+          type: string
+          format: uuid
+          example: "789a1234-e89b-12d3-a456-426614174002"
+        subscriptionId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174003"
+        amount:
+          type: number
+          example: 100000.00
+        status:
+          $ref: "#/components/schemas/CapitalCallAmountType"
+        paymentReference:
+          type: string
+          example: "WIRE-REF-123456"
+        paymentDate:
+          type: string
+          format: date-time
+          example: "2023-10-15T14:30:00Z"
+      example:
+        id: "456e7890-e89b-12d3-a456-426614174001"
+        capitalCallId: "789a1234-e89b-12d3-a456-426614174002"
+        subscriptionId: "123e4567-e89b-12d3-a456-426614174003"
+        amount: 100000.00
+        status: "PERCENTAGE"
+        paymentReference: "WIRE-REF-123456"
+        paymentDate: "2023-10-15T14:30:00Z"
+
+    CapitalCallInvoiceUpdateRequest:
+      type: object
+      properties:
+        capitalCallId:
+          type: string
+          format: uuid
+          example: "789a1234-e89b-12d3-a456-426614174002"
+        subscriptionId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174003"
+        amount:
+          type: number
+          example: 150000.00
+        status:
+          $ref: "#/components/schemas/CapitalCallAmountType"
+        paymentReference:
+          type: string
+          example: "WIRE-REF-789012"
+        paymentDate:
+          type: string
+          format: date-time
+          example: "2023-10-20T10:00:00Z"
+      example:
+        capitalCallId: "789a1234-e89b-12d3-a456-426614174002"
+        subscriptionId: "123e4567-e89b-12d3-a456-426614174003"
+        amount: 150000.00
+        status: "AMOUNT"
+        paymentReference: "WIRE-REF-789012"
+        paymentDate: "2023-10-20T10:00:00Z"
+
+    Subscription:
+      required:
+        - id
+        - assetId
+        - counterpartyId
+        - commitmentAmount
+        - status
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        assetId:
+          type: string
+          format: uuid
+          example: "789a1234-e89b-12d3-a456-426614174002"
+        counterpartyId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174003"
+        commitmentAmount:
+          type: number
+          example: 1000000.00
+        status:
+          "$ref": "#/components/schemas/SubscriptionStatus"
+      example:
+        id: "456e7890-e89b-12d3-a456-426614174001"
+        assetId: "789a1234-e89b-12d3-a456-426614174002"
+        counterpartyId: "123e4567-e89b-12d3-a456-426614174003"
+        commitmentAmount: 1000000.00
+        status: "IN_PROGRESS"
+
+    SubscriptionStatus:
+      type: string
+      enum:
+        - CREATED
+        - PENDING
+        - IN_PROGRESS
+        - COMPLETED
+      example: "PENDING"
+
+    SubscriptionCreateRequest:
+      type: object
+      required:
+        - counterpartyId
+        - assetId
+        - amount
+      properties:
+        counterpartyId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        assetId:
+          type: string
+          format: uuid
+          example: "789a1234-e89b-12d3-a456-426614174002"
+        amount:
+          type: number
+          example: 1000000.00
+      example:
+        counterpartyId: "456e7890-e89b-12d3-a456-426614174001"
+        assetId: "789a1234-e89b-12d3-a456-426614174002"
+        amount: 1000000.00
+
+    SubscriptionUpdateRequest:
+      type: object
+      properties:
+        counterpartyId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        assetId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        amount:
+          type: number
+          example: 1500000.00
+        status:
+          "$ref": "#/components/schemas/SubscriptionStatus"
+      example:
+        counterpartyId: "456e7890-e89b-12d3-a456-426614174001"
+        assetId: "789a1234-e89b-12d3-a456-426614174002"
+        amount: 1500000.00
+        status: "IN_PROGRESS"
+
+    TransactionUpdateRequest:
+      type: object
+      properties:
+        fromCounterpartyId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        toCounterpartyId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174002"
+        amount:
+          "$ref": "#/components/schemas/Money"
+        assetId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174003"
+        description:
+          type: string
+          example: "Updated transaction description"
+        postedAt:
+          type: string
+          format: date-time
+          example: "2023-05-20T09:30:00Z"
+        type:
+          "$ref": "#/components/schemas/TransactionType"
+        status:
+          "$ref": "#/components/schemas/TransactionStatus"
+      example:
+        fromCounterpartyId: "456e7890-e89b-12d3-a456-426614174001"
+        toCounterpartyId: "456e7890-e89b-12d3-a456-426614174002"
+        amount:
+          value: 5000.00
+          currency: "USD"
+        assetId: "456e7890-e89b-12d3-a456-426614174003"
+        description: "Updated payment for services"
+        postedAt: "2023-05-20T09:30:00Z"
+        type: "INVESTMENT"
+        status: "COMPLETED"
+
+    Transaction:
+      required:
+        - id
+        - amount
+        - assetId
+        - description
+        - postedAt
+        - fromCounterpartyId
+        - toCounterpartyId
+        - type
+        - status
+        - groupId
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "01468693-a3bd-4553-ad4c-672bbf7e9fb2"
+        amount:
+          "$ref": "#/components/schemas/Money"
+        assetId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        description:
+          type: string
+          example: "Payment for services rendered"
+        postedAt:
+          type: string
+          format: date-time
+          example: "2023-05-15T14:30:00Z"
+        fromCounterpartyId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        toCounterpartyId:
+          type: string
+          format: uuid
+          example: "216da497-2351-43b2-9ae0-b44d3d51da60"
+        type:
+          "$ref": "#/components/schemas/TransactionType"
+        status:
+          "$ref": "#/components/schemas/TransactionStatus"
+        externalRef:
+          type: string
+          example: "INV-2023-001"
+        groupId:
+          type: string
+          example: "456e7890-e89b-12d3-a456-426614174001"
+      example:
+        id: "01468693-a3bd-4553-ad4c-672bbf7e9fb2"
+        amount:
+          value: 10000.00
+          currency: "USD"
+        assetId: "456e7890-e89b-12d3-a456-426614174001"
+        description: "Payment for services rendered"
+        postedAt: "2023-05-15T14:30:00Z"
+        fromCounterpartyId: "456e7890-e89b-12d3-a456-426614174001"
+        toCounterpartyId: "216da497-2351-43b2-9ae0-b44d3d51da60"
+        type: "INVESTMENT"
+        status: "COMPLETED"
+        externalRef: "INV-2023-001"
+        groupId: "456e7890-e89b-12d3-a456-426614174001"
+
+    Counterparty:
+      required:
+        - name
+        - currency
+        - status
+        - ownerId
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Acme Corporation"
+        currency:
+          "$ref": "#/components/schemas/Currency"
+        status:
+          "$ref": "#/components/schemas/CounterpartyStatus"
+        ownerId:
+          type: string
+          format: uuid
+          example: "216da497-2351-43b2-9ae0-b44d3d51da60"
+        ownerType:
+          "$ref": "#/components/schemas/CounterpartyOwnerType"
+      example:
+        name: "Acme Corporation"
+        currency: "USD"
+        status: "ACTIVE"
+        ownerId: "216da497-2351-43b2-9ae0-b44d3d51da60"
+        ownerType: "LIMITED_PARTNER"
+
+    CounterpartyUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Updated Acme Corporation"
+        currency:
+          "$ref": "#/components/schemas/Currency"
+        status:
+          $ref: "#/components/schemas/CounterpartyStatus"
+        ownerId:
+          type: string
+          format: uuid
+          example: "216da497-2351-43b2-9ae0-b44d3d51da60"
+        ownerType:
+          $ref: "#/components/schemas/CounterpartyOwnerType"
+      example:
+        name: "Updated Acme Corporation"
+        currency: "EUR"
+        status: "CREATED"
+        ownerId: "216da497-2351-43b2-9ae0-b44d3d51da60"
+        ownerType: "ASSET"
+
+    CreateLimitedPartnerRequest:
+      type: object
+      required:
+        - userId
+        - profileId
+      properties:
+        userId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        profileId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+      example:
+        userId: "456e7890-e89b-12d3-a456-426614174001"
+        profileId: "456e7890-e89b-12d3-a456-426614174001"
+
+    UpdateLimitedPartnerRequest:
+      type: object
+      properties:
+        minimumInvestment:
+          type: integer
+          format: int32
+          example: 100000
+        id:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        advisorId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174002"
+        userId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174003"
+        groupId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174004"
+        onfidoApplicantId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174005"
+        profileId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174006"
+        onboardingFlowId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174007"
+        type:
+          type: string
+          enum:
+            - individual
+            - institutional
+            - highNetWorthLimitedPartner
+            - sophisticatedLimitedPartner
+            - corporate
+          example: "individual"
+        status:
+          type: string
+          enum:
+            - CREATED
+            - INVITATION_SENT
+            - INVITATION_REVOKED
+            - COOLING_OFF
+            - ONBOARDING
+            - ACTIVE
+            - LOCKED
+            - UNLOCKED
+            - READ_ONLY
+            - TERMINATED
+            - DELETED
+            - WAITING_FOR_REVIEW
+            - ACCESS_GRANTED
+            - ACCESS_DENIED
+          example: "ACTIVE"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2023-05-01T10:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-05-15T14:30:00Z"
+      example:
+        minimumInvestment: 100000
+        id: "456e7890-e89b-12d3-a456-426614174001"
+        advisorId: "456e7890-e89b-12d3-a456-426614174002"
+        userId: "456e7890-e89b-12d3-a456-426614174003"
+        groupId: "456e7890-e89b-12d3-a456-426614174004"
+        onfidoApplicantId: "456e7890-e89b-12d3-a456-426614174005"
+        profileId: "456e7890-e89b-12d3-a456-426614174006"
+        onboardingFlowId: "456e7890-e89b-12d3-a456-426614174007"
+        type: "individual"
+        status: "ACTIVE"
+        createdAt: "2023-05-01T10:00:00Z"
+        updatedAt: "2023-05-15T14:30:00Z"
+
+    TransactionRequest:
+      type: object
+      required:
+        - transactionType
+        - limitedPartnerId
+        - amount
+        - bankAccountId
+        - fromAccountId
+        - toAccountId
+        - groupId
+        - validWithdrawal
+        - validTransfer
+      properties:
+        transactionType:
+          type: string
+          enum:
+            - INVESTMENT
+            - DEPOSIT
+            - TRANSFER
+            - WITHDRAWAL
+            - FEE
+            - INTEREST
+          example: "INVESTMENT"
+        limitedPartnerId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        amount:
+          "$ref": "#/components/schemas/Money"
+        bankAccountId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174001"
+        fromAccountId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174002"
+        toAccountId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174003"
+        groupId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174004"
+        validWithdrawal:
+          type: boolean
+          example: false
+        validTransfer:
+          type: boolean
+          example: true
+      example:
+        transactionType: INVESTMENT
+        limitedPartnerId: 123e4567-e89b-12d3-a456-426614174000
+        amount:
+          value: 10000
+          currency: USD
+        bankAccountId: 123e4567-e89b-12d3-a456-426614174001
+        fromAccountId: 123e4567-e89b-12d3-a456-426614174002
+        toAccountId: 123e4567-e89b-12d3-a456-426614174003
+        groupId: 123e4567-e89b-12d3-a456-426614174004
+        validWithdrawal: false
+        validTransfer: true
+
+    BaseAsset:
+      type: object
+      required:
+        - id
+        - isin
+        - name
+        - shortName
+        - type
+        - assetStrategy
+        - assetClass
+        - status
+        - currency
+        - counterPartyId
+        - minimumInvestment
+        - closingDate
+        - description
+        - longDescription
+        - logoUrl
+        - smallLogoUrl
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        isin:
+          type: string
+          example: "US0378331005"
+        name:
+          type: string
+          example: "Example Asset"
+        shortName:
+          type: string
+          example: "EXAS"
+        type:
+          "$ref": "#/components/schemas/AssetType"
+        assetStrategy:
+          "$ref": "#/components/schemas/AssetStrategy"
+        assetClass:
+          "$ref": "#/components/schemas/AssetClass"
+        status:
+          "$ref": "#/components/schemas/AssetStatus"
+        currency:
+          "$ref": "#/components/schemas/Currency"
+        counterPartyId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174001"
+        minimumInvestment:
+          type: number
+          example: 1000
+        closingDate:
+          type: string
+          example: "2023-12-31"
+        description:
+          type: string
+          example: "A brief description of the asset"
+        longDescription:
+          type: string
+          example: "A more detailed description of the asset, including its features and potential risks"
+        logoUrl:
+          type: string
+          example: "https://example.com/logo.png"
+        smallLogoUrl:
+          type: string
+          example: "https://example.com/small-logo.png"
+      example:
+        id: 123e4567-e89b-12d3-a456-426614174000
+        isin: US0378331005
+        name: Example Asset
+        shortName: EXAS
+        type: DRAWDOWN
+        assetStrategy: MIXED
+        assetClass: MIXED
+        status: CREATED
+        currency: USD
+        counterPartyId: 123e4567-e89b-12d3-a456-426614174001
+        minimumInvestment: 1000
+        closingDate: "2023-12-31"
+        description: "A brief description of the asset"
+        longDescription: "A more detailed description of the asset, including its features and potential risks"
+        logoUrl: "https://example.com/logo.png"
+        smallLogoUrl: "https://example.com/small-logo.png"
+
+
+    UpdateAssetRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        isin:
+          type: string
+          example: "US0378331005"
+        name:
+          type: string
+          example: "Updated Asset Name"
+        shortName:
+          type: string
+          example: "UPAS"
+        type:
+          "$ref": "#/components/schemas/AssetType"
+        assetStrategy:
+          "$ref": "#/components/schemas/AssetSource"
+        assetClass:
+          "$ref": "#/components/schemas/AssetValuationType"
+        status:
+          "$ref": "#/components/schemas/AssetStatus"
+        currency:
+          "$ref": "#/components/schemas/Currency"
+        counterPartyId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174001"
+        minimumInvestment:
+          type: number
+          example: 2000
+        closingDate:
+          type: string
+          example: "2024-06-30"
+        description:
+          type: string
+          example: "Updated brief description of the asset"
+        longDescription:
+          type: string
+          example: "Updated detailed description of the asset"
+        logoUrl:
+          type: string
+          example: "https://example.com/updated-logo.png"
+        smallLogoUrl:
+          type: string
+          example: "https://example.com/updated-small-logo.png"
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        isin: "US0378331005"
+        name: "Updated Global Tech Fund"
+        shortName: "UGTF"
+        type: "SEMI_LIQUID"
+        assetStrategy: "FUND_MANAGER"
+        assetClass: "MARKET_VALUE"
+        status: "OPEN"
+        currency: "USD"
+        counterPartyId: "123e4567-e89b-12d3-a456-426614174001"
+        minimumInvestment: 2000
+        closingDate: "2024-06-30"
+        description: "Updated high-growth technology fund focusing on emerging markets"
+        longDescription: "This updated fund targets innovative tech companies in rapidly developing economies, aiming for substantial long-term growth while managing risks through diversification."
+        logoUrl: "https://example.com/updated-global-tech-fund-logo.png"
+        smallLogoUrl: "https://example.com/updated-global-tech-fund-small-logo.png"
+
+    AssetValuation:
+      type: object
+      required:
+        - id
+        - valuation
+        - asOf
+        - assetId
+        - source
+        - assetValuationType
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "ce32da3a-19a9-4b29-b2a3-521a18df11c6"
+        valuation:
+          "$ref": "#/components/schemas/Money"
+        asOf:
+          type: string
+          example: "2023-05-15T14:30:00Z"
+        assetId:
+          type: string
+          format: uuid
+          example: ce32da3a-19a9-4b29-b2a3-521a18df11c6
+        source:
+          "$ref": "#/components/schemas/AssetSource"
+        assetValuationType:
+          "$ref": "#/components/schemas/AssetValuationType"
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        valuation:
+          amount: 1000000
+          currency: USD
+        asOf: "2023-05-15T14:30:00Z"
+        assetId: "987e6543-e21b-12d3-a456-426614174000"
+        source: FUND_MANAGER
+        assetValuationType: NAV
+
+    AssetStrategy:
+      type: string
+      enum:
+        - CREDIT
+        - EQUITY
+        - REAL_ASSETS
+        - MIXED
+      example: "EQUITY"
+
+    AssetType:
+      type: string
+      enum:
+        - DRAWDOWN
+        - SEMI_LIQUID
+        - CASH
+      example: "SEMI_LIQUID"
+
+    AssetStatus:
+      type: string
+      enum:
+        - CREATED
+        - OPEN
+        - CLOSED
+        - TERMINATED
+      example: "OPEN"
+
+    AssetClass:
+      type: string
+      enum:
+        - CORPORATE_CREDIT
+        - ASSET_BACKED_FINANCE
+        - PRIVATE_EQUITY
+        - HYBRID_VALUE
+        - IMPACT_INVESTING
+        - SECONDARIES
+        - INFRASTRUCTURE
+        - REAL_ESTATE
+        - SUSTAINABLE_INVESTING
+        - EUROPEAN_PRINCIPAL_FINANCE
+        - MIXED
+      example: "PRIVATE_EQUITY"
+
+    AssetSource:
+      type: string
+      enum:
+        - FUND_MANAGER
+        - FUND_ADMIN
+        - INVESTOR
+        - THIRD_PARTY
+        - UNKNOWN
+      example: "FUND_MANAGER"
+
+    AssetValuationType:
+      type: string
+      enum:
+        - NAV
+        - TVPI
+      example: "NAV"
+
+    Money:
+      type: object
+      required:
+        - amount
+        - currency
+      properties:
+        amount:
+          type: number
+          example: 10000
+        currency:
+          "$ref": "#/components/schemas/Currency"
+      example:
+        amount: 1000.50
+        currency: "USD"
+
+    AssetValuationRequest:
+      type: object
+      required:
+        - value
+        - asOf
+        - source
+        - assetValuationType
+        - currency
+      properties:
+        value:
+          type: number
+          example: 10000.0
+        asOf:
+          type: string
+          example: "2023-05-15T14:30:00Z"
+        source:
+          "$ref": "#/components/schemas/AssetSource"
+        assetValuationType:
+          "$ref": "#/components/schemas/AssetValuationType"
+        currency:
+          "$ref": "#/components/schemas/Currency"
+      example:
+        value: 1000000.00
+        asOf: "2023-05-15T14:30:00Z"
+        source: "FUND_MANAGER"
+        assetValuationType: "NAV"
+        currency: "USD"
+
+    BankAccount:
+      required:
+        - accountHolder
+        - accountNumber
+        - accountType
+        - bankId
+        - iban
+        - id
+        - limitedPartnerId
+        - sortCode
+        - swiftCode
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        limitedPartnerId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174001"
+        bankId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174002"
+        accountHolder:
+          type: string
+          example: "John Doe"
+        accountNumber:
+          type: string
+          example: "1234567890"
+        sortCode:
+          type: string
+          example: "123456"
+        iban:
+          type: string
+          example: "GB29NWBK60161331926819"
+        swiftCode:
+          type: string
+          example: "NWBKGB2L"
+        type:
+          type: string
+          enum:
+            - DOMESTIC
+            - INTERNATIONAL
+          example: "DOMESTIC"
+        accountType:
+          type: string
+          enum:
+            - business
+            - individual
+          example: "business"
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174000"
+        limitedPartnerId: "123e4567-e89b-12d3-a456-426614174001"
+        bankId: "123e4567-e89b-12d3-a456-426614174002"
+        accountHolder: "John Doe"
+        accountNumber: "1234567890"
+        sortCode: "123456"
+        iban: "GB29NWBK60161331926819"
+        swiftCode: "NWBKGB2L"
+        type: "DOMESTIC"
+        accountType: "business"
+
+    UpdateBankAccountRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        limitedPartnerId:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174001"
+        bankId:
+          type: string
+          format: uuid
+          example: "789a1234-e89b-12d3-a456-426614174002"
+        accountHolder:
+          type: string
+          example: "John Doe"
+        accountNumber:
+          type: string
+          example: "12345678"
+        sortCode:
+          type: string
+          example: "123456"
+        iban:
+          type: string
+          example: "GB29NWBK60161331926819"
+        swiftCode:
+          type: string
+          example: "NWBKGB2L"
+        type:
+          type: string
+          enum:
+            - DOMESTIC
+            - INTERNATIONAL
+          example: "DOMESTIC"
+        accountType:
+          type: string
+          enum:
+            - business
+            - individual
+          example: "business"
+      example:
+        accountNumber: "12345678"
+        sortCode: "123456"
+        iban: "GB29NWBK60161331926819"
+
+    BankAccountRequest:
+      type: object
+      required:
+        - bankId
+        - type
+        - accountType
+      properties:
+        bankId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        type:
+          type: string
+          enum:
+            - DOMESTIC
+            - INTERNATIONAL
+          example: "DOMESTIC"
+        accountType:
+          type: string
+          enum:
+            - business
+            - individual
+          example: "business"
+      example:
+        bankId: "123e4567-e89b-12d3-a456-426614174000"
+        type: "DOMESTIC"
+        accountType: "business"
+
+    FundAdmin:
+      type: object
+      required:
+        - id
+        - name
+        - contactEmail
+        - contactPhone
+        - assetId
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174001"
+        name:
+          type: string
+          example: "John Doe"
+        contactEmail:
+          type: string
+          example: "john.doe@example.com"
+        contactPhone:
+          type: string
+          example: "+1234567890"
+        assetId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174002"
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174001"
+        name: "John Doe"
+        contactEmail: "john.doe@example.com"
+        contactPhone: "+1234567890"
+        assetId: "123e4567-e89b-12d3-a456-426614174002"
+
+    FundAdminRequest:
+      type: object
+      required:
+        - name
+        - contactEmail
+        - contactPhone
+      properties:
+        name:
+          type: string
+          example: "Jane Smith"
+        contactEmail:
+          type: string
+          example: "jane.smith@example.com"
+        contactPhone:
+          type: string
+          example: "+9876543210"
+      example:
+        name: "Jane Smith"
+        contactEmail: "jane.smith@example.com"
+        contactPhone: "+9876543210"
+
+    UpdateFundAdminRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "123e4567-e89b-12d3-a456-426614174003"
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        resourceId:
+          type: string
+          example: "RESOURCE123"
+        description:
+          type: string
+          example: "Senior Fund Administrator"
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174003"
+        firstName: "John"
+        lastName: "Doe"
+        resourceId: "RESOURCE123"
+        description: "Senior Fund Administrator"
+
+    CounterpartyStatus:
+      type: string
+      enum:
+        - CREATED
+        - IN_REVIEW
+        - ACTIVE
+        - BLOCKED
+        - CLOSED
+        - DELETED
+      example: "ACTIVE"
+
+    LimitedPartnerResponse:
+      type: object
+      required:
+        - id
+        - generalPartnerId
+        - name
+        - limitedPartnerStatus
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174004"
+        generalPartnerId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174005"
+        name:
+          type: string
+          example: "Example Limited Partner"
+        limitedPartnerStatus:
+          $ref: '#/components/schemas/LimitedPartnersStatus'
+      example:
+        id: "123e4567-e89b-12d3-a456-426614174004"
+        generalPartnerId: "123e4567-e89b-12d3-a456-426614174005"
+        name: "Example Limited Partner"
+        limitedPartnerStatus: "ACTIVE"
+
+    LimitedPartnersStatus:
+      type: string
+      enum:
+        - CREATED
+        - ACTIVE
+        - DELETED
+      example: "ACTIVE"
+
+    TransactionType:
+      type: string
+      enum:
+        - INVESTMENT
+        - CAPITAL_CALL
+        - DISTRIBUTION
+      example: "INVESTMENT"
+
+    TransactionStatus:
+      type: string
+      enum:
+        - CREATED
+        - PENDING
+        - INITIATED
+        - CANCELLED
+        - COMPLETED
+      example: "PENDING"
+
+    BasicApiResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          example: { "id": "123", "name": "Example Data" }
+        meta:
+          type: object
+          additionalProperties:
+            type: object
+            example: { "customKey": "customValue" }
+          example: { "page": 1, "totalPages": 5, "customMetadata": { "key1": "value1", "key2": "value2" } }
+        errors:
+          $ref: '#/components/schemas/ErrorResponse'
+      example:
+        data: { "id": "123", "name": "Example Data" }
+        meta: { 
+          "page": 1, 
+          "totalPages": 5, 
+          "customMetadata": { 
+            "key1": "value1", 
+            "key2": "value2" 
+          }
+        }
+        errors: null
+
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+          format: int64
+          example: 4001
+        statusCode:
+          "$ref": "#/components/schemas/HttpStatusCode"
+        message:
+          type: string
+          example: "Bad Request"
+      example:
+        errorCode: 4001
+        statusCode: 
+          error: true
+          is4xxClientError: true
+          is5xxServerError: false
+          is1xxInformational: false
+          is2xxSuccessful: false
+          is3xxRedirection: false
+        message: "Bad Request"
+
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+          example: true
+        is4xxClientError:
+          type: boolean
+          example: true
+        is5xxServerError:
+          type: boolean
+          example: false
+        is1xxInformational:
+          type: boolean
+          example: false
+        is2xxSuccessful:
+          type: boolean
+          example: false
+        is3xxRedirection:
+          type: boolean
+          example: false
+      example:
+        error: true
+        is4xxClientError: true
+        is5xxServerError: false
+        is1xxInformational: false
+        is2xxSuccessful: false
+        is3xxRedirection: false
+
+    ApiResponseTransaction:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Transaction"
+          example:
+            data:
+              id: "789"
+              type: "INVESTMENT"
+              status: "COMPLETED"
+      example:
+        data:
+          id: "789"
+          type: "INVESTMENT"
+          status: "COMPLETED"
+        meta: { "timestamp": "2023-06-15T10:30:00Z" }
+        errors: null
+
+    ApiResponseUser:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/UserResponse"
+      example:
+        data:
+          id: "456"
+          username: "john_doe"
+          email: "john@example.com"
+        meta: { "lastLogin": "2023-06-14T15:45:00Z" }
+        errors: null
+
+    ApiResponseFundAdmin:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/FundAdmin"
+          example:
+            data:
+              id: "321"
+              name: "ABC Fund Administration"
+              contactEmail: "contact@abcfundadmin.com"
+      example:
+        data:
+          id: "321"
+          name: "ABC Fund Administration"
+          contactEmail: "contact@abcfundadmin.com"
+        meta: { "registrationDate": "2022-01-01" }
+        errors: null
+
+    ApiResponseBankAccount:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/BankAccount"
+          example:
+            data:
+              id: "654"
+              accountNumber: "1234567890"
+              bankName: "XYZ Bank"
+      example:
+        data:
+          id: "654"
+          accountNumber: "1234567890"
+          bankName: "XYZ Bank"
+        meta: { "lastUpdated": "2023-06-10T09:00:00Z" }
+        errors: null
+
+    ApiResponseAssetValuation:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/AssetValuation"
+          example:
+            data:
+              id: "987"
+              assetId: "123"
+              value: 1000000
+              date: "2023-06-15"
+      example:
+        data:
+          id: "987"
+          assetId: "123"
+          value: 1000000
+          date: "2023-06-15"
+        meta: { "currency": "USD" }
+        errors: null
+
+    ApiResponseAsset:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/BaseAsset"
+          example:
+            data:
+              id: "123"
+              name: "Tech Stock A"
+              type: "EQUITY"
+      example:
+        data:
+          id: "123"
+          name: "Tech Stock A"
+          type: "EQUITY"
+        meta: { "sector": "Technology" }
+        errors: null
+
+    ApiResponseCounterparty:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Counterparty"
+          example:
+            data:
+              id: "246"
+              name: "Partner Company B"
+              type: "VENDOR"
+      example:
+        data:
+          id: "246"
+          name: "Partner Company B"
+          type: "VENDOR"
+        meta: { "relationshipStartDate": "2022-03-15" }
+        errors: null
+
+    ApiResponseSubscription:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Subscription"
+          example:
+            data:
+              id: "135"
+              userId: "456"
+              planName: "Premium"
+      example:
+        data:
+          id: "135"
+          userId: "456"
+          planName: "Premium"
+        meta: { "nextBillingDate": "2023-07-15" }
+        errors: null
+
+    ApiResponseCapitalCall:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/CapitalCall"
+          example:
+            data:
+              id: "579"
+              amount: 500000
+              dueDate: "2023-07-30"
+      example:
+        data:
+          id: "579"
+          amount: 500000
+          dueDate: "2023-07-30"
+        meta: { "status": "PENDING" }
+        errors: null
+
+    ApiResponseLimitedPartner:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/LimitedPartnerResponse"
+          example:
+            data:
+              id: "864"
+              name: "Investor XYZ"
+              commitmentAmount: 1000000
+      example:
+        data:
+          id: "864"
+          name: "Investor XYZ"
+          commitmentAmount: 1000000
+        meta: { "joinDate": "2022-09-01" }
+        errors: null
+
+    ApiResponseGeneralPartner:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/GeneralPartner"
+          example:
+            data:
+              id: "753"
+              name: "Fund Management LLC"
+              managementFeePercentage: 2
+      example:
+        data:
+          id: "753"
+          name: "Fund Management LLC"
+          managementFeePercentage: 2
+        meta: { "foundingYear": 2015 }
+        errors: null
+
+    ApiResponseCapitalCallInvoice:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/CapitalCallInvoice"
+          example:
+            data:
+              id: "951"
+              capitalCallId: "579"
+              invoiceNumber: "INV-2023-001"
+              amount: 250000
+              dueDate: "2023-08-15"
+              status: "ISSUED"
+      example:
+        data:
+          id: "951"
+          capitalCallId: "579"
+          invoiceNumber: "INV-2023-001"
+        meta: { "issueDate": "2023-06-15" }
+        errors: null

@@ -1,0 +1,3534 @@
+---
+openapi: 3.0.1
+info:
+  title: Vega backend api
+  version: 1.0.0
+servers:
+  - url: https://dev-api.vega.investments/v2
+    description: DEV
+  - url: https://test-api.vega.investments/v2
+    description: TEST
+  - url: https://api.vega.investments/v2
+    description: PROD
+  - url: http://localhost:8080
+    description: LOCAL
+security:
+  - bearerAuth: []
+tags:
+  - name: Actuator
+    description: Monitor and interact
+    externalDocs:
+      description: Spring Boot Actuator Web API Documentation
+      url: https://docs.spring.io/spring-boot/docs/current/actuator-api/html/
+
+paths:
+  "/capital-calls":
+    get:
+      summary: Get all capital calls or distributions for an asset
+      tags:
+        - capital-calls
+      operationId: getAllCapitalCalls
+      parameters:
+        - name: assetId
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ApiResponseCapitalCalls"
+
+    post:
+      summary: Create a capital call or distributions for an asset
+      tags:
+        - capital-calls
+      operationId: createCapitalCallOrDistribution
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CapitalCall"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseCapitalCall"
+
+  "/capital-calls/{capitalCallId}":
+    get:
+      summary: Retrieve a single capital call or distributions
+      tags:
+        - capital-calls
+      operationId: getCapitalCallOrDistributionById
+      parameters:
+        - name: capitalCallId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseCapitalCall"
+
+    patch:
+      summary: Update a capital call or distributions for an asset
+      tags:
+        - capital-calls
+      operationId: updateCapitalCallOrDistribution
+      parameters:
+        - name: capitalCallId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCapitalCallRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseCapitalCall"
+
+    delete:
+      summary: Delete a capital call or distributions
+      tags:
+        - capital-calls
+      operationId: deleteCapitalCallOrDistribution
+      parameters:
+        - name: capitalCallId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+  "/limited-partner-capital-calls":
+    get:
+      summary: Get all limited-partner-capital-calls or limited-partner-distributions
+      tags:
+        - limited-partner-capital-calls
+      operationId: getAllLimitedPartnerCapitalCallsOrDistributions
+      parameters:
+        - name: assetId
+          in: query
+          schema:
+            type: string
+        - name: capitalCallId
+          in: query
+          schema:
+            type: string
+        - name: limitedPartnerId
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ApiResponseLimitedPartnerCapitalCalls"
+
+  "/limited-partner-capital-calls/{limitedPartnerCapitalCallId}":
+    get:
+      summary: Retrieve a single limitedPartnerCapitalCall or limitedPartnerDistribution
+      tags:
+        - limited-partner-capital-calls
+      operationId: getLimitedPartnerCapitalCallOrDistributionById
+      parameters:
+        - name: limitedPartnerCapitalCallId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseLimitedPartnerCapitalCall"
+
+    patch:
+      summary: Update limited-partner-capital-calls or limited-partner-distributions
+      tags:
+        - limited-partner-capital-calls
+      operationId: updateLimitedPartnerCapitalCallOrDistributionStatus
+      parameters:
+        - name: limitedPartnerCapitalCallId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLimitedPartnerCapitalCallRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseLimitedPartnerCapitalCall"
+
+  "/subscriptions":
+    get:
+      summary: Get all subscriptions for assetId or limitedPartnerId
+      tags:
+        - subscriptions
+      operationId: getAllSubscriptions
+      parameters:
+        - name: assetId
+          in: query
+          schema:
+            type: string
+        - name: limitedPartnerId
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ApiResponseSubscriptions"
+
+    post:
+      summary: Get all subscriptions for assetId or limitedPartnerId
+      tags:
+        - subscriptions
+      operationId: createSubscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseSubscription"
+
+  "/subscriptions/{subscriptionId}":
+    get:
+      summary: Retrieve a single subscription
+      tags:
+        - subscriptions
+      operationId: getSubscriptionById
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseSubscription"
+
+    patch:
+      summary: Update a subscription
+      tags:
+        - subscriptions
+      operationId: updateSubscription
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSubscriptionRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseSubscription"
+
+  "/transaction":
+    post:
+      summary: Creates a new transaction for an limitedPartner
+      tags:
+        - transactions
+      operationId: createTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseTransaction"
+
+  "/transactions/{transactionId}":
+    patch:
+      summary: Updates a transaction's details
+      tags:
+        - transactions
+      operationId: updateTransaction
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTransactionRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseTransaction"
+
+    get:
+      summary: Fetches a serialized version of a transaction
+      tags:
+        - transactions
+      operationId: getTransactionById
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseTransaction"
+
+  "/transactions/{limitedPartnerId}":
+    get:
+      summary: Fetches all transactions of an limited-partner
+      tags:
+        - transactions
+      operationId: getTransactionsByLimitedPartnerId
+      parameters:
+        - name: limitedPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ApiResponseTransaction"
+
+  "/counterparties":
+    post:
+      summary: Creates a new counterparty to allow trading
+      tags:
+        - counterparties
+      operationId: createCounterparty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CounterpartyRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseCounterparty"
+
+  "/counterparties/{counterpartyId}":
+    patch:
+      summary: Updates the information of a counterparty
+      tags:
+        - counterparties
+      operationId: updateCounterparty
+      parameters:
+        - name: counterpartyId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCounterpartyRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseCounterparty"
+
+    delete:
+      summary: Deletes a counterparty from the system
+      tags:
+        - counterparties
+      operationId: deleteCounterparty
+      parameters:
+        - name: counterpartyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+  "/issue-document-types":
+    get:
+      summary: Get list of financial document types for asset that can be requested from the LPs
+      tags:
+        - documents
+      operationId: getIssueDocumentTypes
+      parameters:
+        - name: assetId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseIssueDocumentTypes"
+
+  "/assets/{assetId}":
+    get:
+      summary: Retrieves a single asset given the assetId
+      tags:
+        - assets
+      operationId: getAssetById
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseAsset"
+
+    patch:
+      summary: Update the details of an asset
+      tags:
+        - assets
+      operationId: updateAsset
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAssetRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseAsset"
+
+    delete:
+      summary: Delete an asset
+      tags:
+        - assets
+      operationId: deleteAsset
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+  "/assets/{assetId}/valuations":
+    get:
+      summary: Retrieves a single asset’s valuations sorted by date
+      tags:
+        - assets
+      operationId: getAssetValuations
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ApiResponseAssetValuation"
+
+    post:
+      summary: Create a new valuation for an asset
+      tags:
+        - assets
+      operationId: createAssetValuation
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetValuationRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseAssetValuation"
+
+  "/assets/{assetId}/bank-account":
+    post:
+      summary: Create a new bank account for an asset
+      tags:
+        - assets
+      operationId: createAssetBankAccount
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BankAccountRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseBankAccount"
+
+  "/assets/{assetId}/fund-admin":
+    post:
+      summary: Create a new fund-admin for an asset
+      tags:
+        - assets
+      operationId: createAssetAdmin
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FundAdminRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseFundAdmin"
+
+  "/assets/{assetId}/bank-accounts/{bankAccountId}":
+    patch:
+      summary: Update the details of a bank account
+      tags:
+        - assets
+      operationId: updateAssetBankAccount
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: bankAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBankAccountRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseBankAccount"
+
+  "/assets/{assetId}/fund-admins/{fundAdminId}":
+    patch:
+      summary: Update the details of an fund-admin
+      tags:
+        - assets
+      operationId: updateAssetFundAdmin
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: fundAdminId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateFundAdminRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/ApiResponseFundAdmin"
+    delete:
+      summary: Delete a fund-admin
+      tags:
+        - assets
+      operationId: deleteAssetFundAdmin
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: fundAdminId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+  "/assets/{assetId}/valuations/{valuationId}":
+    delete:
+      summary: Delete a valuation
+      tags:
+        - assets
+      operationId: deleteAssetValuation
+      parameters:
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: valuationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+  "/documents/issued-documents":
+    get:
+      summary: Get list of previously issued documents for an asset with name, type, date
+      tags:
+        - documents
+      operationId: getIssuedDocuments
+      parameters:
+        - name: assetId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ApiResponseDocument"
+
+  "/documents/{documentId}":
+    get:
+      summary: Get details of the document retrieval process
+      tags:
+        - documents
+      operationId: getDocumentDetails
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: quarter
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseDocumentRetrievalDetails"
+
+    post:
+      summary: Request financial documents for LPs
+      tags:
+        - documents
+      operationId: requestDocumentsForLPs
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+    delete:
+      summary: Delete a document
+      tags:
+        - documents
+      operationId: deleteDocument
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+    patch:
+      summary: Update the details of a document
+      tags:
+        - documents
+      operationId: updateDocument
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDocumentRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseDocument"
+
+    parameters:
+      - name: documentId
+        in: path
+        required: true
+        schema:
+          type: string
+
+  "/documents/{documentId}/request-documents":
+    post:
+      summary: Request financial documents for LPs
+      tags:
+        - documents
+      operationId: requestDocumentsForLPs
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+  "/documents/{limitedPartnerId}":
+    get:
+      summary: Get documents for limitedPartner
+      tags:
+        - documents
+      operationId: getDocumentsForLimitedPartner
+      parameters:
+        - name: limitedPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ApiResponseDocument"
+
+  "/documents":
+    post:
+      summary: Create/upload new document
+      tags:
+        - documents
+      operationId: createDocument
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDocumentRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseDocument"
+
+  "/documents/{documentId}/watermark":
+    get:
+      summary: Watermark a document
+      tags:
+        - documents
+      operationId: watermarkDocument
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limitedPartnerId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: generalPartnerId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseDocumentWatermark"
+
+  "/users":
+    get:
+      tags:
+        - users
+      operationId: getAll
+      summary: Get all users
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseUsers"
+    post:
+      summary: Create a user
+      tags:
+        - users
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseUser"
+
+  "/users/{userId}":
+    get:
+      tags:
+        - users
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      summary: Get all users
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseUser"
+
+    patch:
+      summary: Update the details of a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      tags:
+        - users
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseUser"
+
+    delete:
+      summary: Delete a user
+      tags:
+        - users
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+  "/general-partners":
+    get:
+      tags:
+        - general-partners
+      operationId: getAllCompanies
+      summary: List of general-partners
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseGeneralPartner"
+    post:
+      summary: Create a general-partner
+      parameters:
+        - name: generalPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      tags:
+        - general-partners
+      operationId: createGeneralPartner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGeneralPartnerRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseGeneralPartner"
+
+  "/general-partners/{generalPartnerId}":
+    get:
+      tags:
+        - general-partners
+      operationId: getGeneralPartnerById
+      parameters:
+        - name: generalPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      summary: Get a general-partner by its id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseGeneralPartner"
+
+    patch:
+      summary: Update the details of a general-partner
+      parameters:
+        - name: generalPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      tags:
+        - general-partners
+      operationId: updateGeneralPartner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGeneralPartnerRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseGeneralPartner"
+
+    delete:
+      summary: Delete a general-partner
+      tags:
+        - general-partners
+      operationId: deleteGeneralPartner
+      parameters:
+        - name: generalPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+  "/general-partners/{generalPartnerId}/limited-partners":
+    get:
+      tags:
+        - general-partners
+      operationId: getGeneralPartnerLimitedPartners
+      parameters:
+        - name: generalPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      summary: Get all the limited-partners of a general-partner
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseLimitedPartner"
+
+  "/profiles":
+    post:
+      summary: Create a profile
+      tags:
+        - profiles
+      operationId: createProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProfileRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseProfile"
+
+  "/profiles/{profileId}":
+    get:
+      tags:
+        - profiles
+      operationId: getProfileById
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+      summary: Get a profile by its id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseProfile"
+
+    patch:
+      summary: Update the details of a profile
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+      tags:
+        - profiles
+      operationId: updateProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseProfile"
+
+    delete:
+      summary: Delete a profile
+      tags:
+        - profiles
+      operationId: deleteProfile
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+  "/limited-partners":
+    post:
+      summary: Create a limited partner
+      tags:
+        - limited-partners
+      operationId: createLimitedPartner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLimitedPartnerRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseLimitedPartner"
+
+  "/limited-partners/{limitedPartnerId}":
+    get:
+      tags:
+        - limited-partners
+      operationId: getLimitedPartnerById
+      parameters:
+        - name: limitedPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      summary: Get an limitedPartner by its id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseLimitedPartner"
+
+    patch:
+      summary: Update the details of an limitedPartner
+      parameters:
+        - name: limitedPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      tags:
+        - limited-partners
+      operationId: updateLimitedPartner
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLimitedPartnerRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponseLimitedPartner"
+
+    delete:
+      summary: Delete an limitedPartner
+      tags:
+        - limited-partners
+      operationId: deleteLimitedPartner
+      parameters:
+        - name: limitedPartnerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: OK
+
+components:
+  schemas:
+    Profile:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - phoneNumber
+        - address
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+          format: string
+        lastName:
+          type: string
+          format: string
+        email:
+          type: string
+          format: string
+        phoneNumber:
+          type: string
+          format: string
+        address:
+          type: string
+          format: string
+
+    CreateProfileRequest:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - phoneNumber
+        - address
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+          format: string
+        lastName:
+          type: string
+          format: string
+        email:
+          type: string
+          format: string
+        phoneNumber:
+          type: string
+          format: string
+        address:
+          type: string
+          format: string
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+          format: string
+        lastName:
+          type: string
+          format: string
+        email:
+          type: string
+          format: string
+        phoneNumber:
+          type: string
+          format: string
+        address:
+          type: string
+          format: string
+
+    User:
+      required:
+        - id
+        - profileId
+        - generalPartnerId
+        - limitedPartnerId
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        profileId:
+          type: string
+          format: uuid
+        generalPartnerId:
+          type: string
+          format: uuid
+        limitedPartnerId:
+          type: string
+          format: uuid
+
+    CreateUserRequest:
+      required:
+        - profileId
+      type: object
+      properties:
+        profileId:
+          type: string
+          format: uuid
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        profileId:
+          type: string
+          format: uuid
+        generalPartnerId:
+          type: string
+          format: uuid
+        limitedPartnerId:
+          type: string
+          format: uuid
+
+    GeneralPartner:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+
+    CreateGeneralPartnerRequest:
+      type: object
+      required:
+        name:
+          type: string
+
+    UpdateGeneralPartnerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+
+    CapitalCallType:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - CAPITAL_CALL
+            - DISTRIBUTION
+            - SUBSCRIPTION
+
+    CapitalCall:
+      required:
+        - amount
+        - amountType
+        - asset
+        - assetId
+        - dueDate
+        - id
+        - status
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: "#/components/schemas/CapitalCallType"
+        status:
+          type: string
+          enum:
+            - CREATED
+            - INCOMING
+            - ESTIMATED
+            - ACTIVE
+            - COMPLETED
+            - CANCELLED
+        amount:
+          type: number
+        amountType:
+          type: string
+          enum:
+            - PERCENTAGE
+            - AMOUNT
+        dueDate:
+          type: string
+          format: date-time
+        assetId:
+          type: string
+          format: uuid
+        asset:
+          "$ref": "#/components/schemas/Asset"
+        documentUrl:
+          type: string
+        active:
+          type: boolean
+        distribution:
+          type: boolean
+
+    UpdateCapitalCallRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: "#/components/schemas/CapitalCallType"
+        status:
+          type: string
+          enum:
+            - CREATED
+            - INCOMING
+            - ESTIMATED
+            - ACTIVE
+            - COMPLETED
+            - CANCELLED
+        amount:
+          type: number
+        amountType:
+          type: string
+          enum:
+            - PERCENTAGE
+            - AMOUNT
+        dueDate:
+          type: string
+          format: date-time
+        assetId:
+          type: string
+          format: uuid
+        asset:
+          "$ref": "#/components/schemas/Asset"
+        documentUrl:
+          type: string
+        active:
+          type: boolean
+        distribution:
+          type: boolean
+
+    LimitedPartnerCapitalCall:
+      required:
+        - amount
+        - capitalCall
+        - clientOrderId
+        - id
+        - limitedPartnerId
+        - status
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        capitalCall:
+          "$ref": "#/components/schemas/CapitalCall"
+        limitedPartnerId:
+          type: string
+          format: uuid
+        clientOrderId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        status:
+          type: string
+          enum:
+            - CREATED
+            - PENDING
+            - PROCESSING
+            - RECEIVED_BY_FUND
+            - COMPLETED
+        paymentReference:
+          type: string
+        paymentDate:
+          type: string
+          format: date-time
+
+    UpdateLimitedPartnerCapitalCallRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        capitalCall:
+          "$ref": "#/components/schemas/CapitalCall"
+        limitedPartnerId:
+          type: string
+          format: uuid
+        clientOrderId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        status:
+          type: string
+          enum:
+            - CREATED
+            - PENDING
+            - PROCESSING
+            - RECEIVED_BY_FUND
+            - COMPLETED
+        paymentReference:
+          type: string
+        paymentDate:
+          type: string
+          format: date-time
+
+    Subscription:
+      required:
+        - assetId
+        - broker
+        - commitment
+        - completedAt
+        - currency
+        - envelopeId
+        - groupId
+        - id
+        - limitedPartnerId
+        - paid
+        - postedDate
+        - price
+        - productId
+        - side
+        - status
+        - timeInForce
+        - type
+        - updatedAt
+        - userId
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        limitedPartnerId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        walletAccountId:
+          type: string
+          format: uuid
+        paid:
+          type: number
+        price:
+          type: number
+        commitment:
+          type: number
+        broker:
+          "$ref": "#/components/schemas/Broker"
+        groupId:
+          type: string
+          format: uuid
+        currency:
+          type: string
+          enum:
+            - GBP
+            - USD
+            - EUR
+            - AUD
+            - JPY
+            - CAD
+            - CNY
+            - CHF
+            - SEK
+            - NZD
+            - MXN
+            - SGD
+            - HKD
+            - NOK
+            - KRW
+            - TRY
+            - INR
+            - RUB
+            - BRL
+            - ZAR
+            - GBX
+            - DKK
+            - PLN
+            - HUF
+            - CZK
+            - HRK
+            - BGN
+            - ISK
+            - RSD
+        side:
+          type: string
+          enum:
+            - BUY
+            - SELL
+        type:
+          type: string
+          enum:
+            - MARKET
+            - LIMIT
+            - STOP_LOSS
+            - TAKE_PROFIT
+        timeInForce:
+          type: string
+          enum:
+            - DAY
+            - GOOD_TILL_CANCEL
+            - FILL_OR_KILL
+            - MARKET_ON_OPEN
+            - LIMIT_ON_OPEN
+            - IMMEDIATE_OR_CANCEL
+        asset:
+          type: string
+          format: uuid
+          deprecated: true
+        assetId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        postedDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - CREATED
+            - PENDING
+            - SUBMITTED
+            - ORDERED
+            - CANCELLED
+            - FAILED
+            - COMPLETED
+        envelopeId:
+          type: string
+          format: uuid
+        completedAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        attributes:
+          "$ref": "#/components/schemas/ClientOrderAttributes"
+        completed:
+          type: boolean
+        buyOrder:
+          type: boolean
+        signedPaid:
+          type: number
+        sellPercentage:
+          type: number
+        privateSector:
+          type: boolean
+        pendingSellOrder:
+          type: boolean
+        pendingBuyOrder:
+          type: boolean
+        pendingOrCompleted:
+          type: boolean
+        signedCommitmentAmount:
+          type: number
+
+    ClientOrderAttributes:
+      type: object
+      properties:
+        sellPercentage:
+          type: number
+        externalFlowId:
+          type: string
+
+    SubscriptionRequest:
+      type: object
+      properties:
+        limitedPartnerId:
+          type: string
+          format: uuid
+        assetId:
+          type: string
+          format: uuid
+        side:
+          type: string
+          enum:
+            - BUY
+            - SELL
+        walletAccountId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        sellPercentage:
+          type: number
+
+    UpdateSubscriptionRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        limitedPartnerId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        walletAccountId:
+          type: string
+          format: uuid
+        paid:
+          type: number
+        price:
+          type: number
+        commitment:
+          type: number
+        broker:
+          "$ref": "#/components/schemas/Broker"
+        groupId:
+          type: string
+          format: uuid
+        currency:
+          type: string
+          enum:
+            - GBP
+            - USD
+            - EUR
+            - AUD
+            - JPY
+            - CAD
+            - CNY
+            - CHF
+            - SEK
+            - NZD
+            - MXN
+            - SGD
+            - HKD
+            - NOK
+            - KRW
+            - TRY
+            - INR
+            - RUB
+            - BRL
+            - ZAR
+            - GBX
+            - DKK
+            - PLN
+            - HUF
+            - CZK
+            - HRK
+            - BGN
+            - ISK
+            - RSD
+        side:
+          type: string
+          enum:
+            - BUY
+            - SELL
+        type:
+          type: string
+          enum:
+            - MARKET
+            - LIMIT
+            - STOP_LOSS
+            - TAKE_PROFIT
+        timeInForce:
+          type: string
+          enum:
+            - DAY
+            - GOOD_TILL_CANCEL
+            - FILL_OR_KILL
+            - MARKET_ON_OPEN
+            - LIMIT_ON_OPEN
+            - IMMEDIATE_OR_CANCEL
+        asset:
+          type: string
+          format: uuid
+          deprecated: true
+        assetId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        postedDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - CREATED
+            - PENDING
+            - SUBMITTED
+            - ORDERED
+            - CANCELLED
+            - FAILED
+            - COMPLETED
+        envelopeId:
+          type: string
+          format: uuid
+        completedAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        attributes:
+          "$ref": "#/components/schemas/ClientOrderAttributes"
+        completed:
+          type: boolean
+        buyOrder:
+          type: boolean
+        signedPaid:
+          type: number
+        sellPercentage:
+          type: number
+        privateSector:
+          type: boolean
+        pendingSellOrder:
+          type: boolean
+        pendingBuyOrder:
+          type: boolean
+        pendingOrCompleted:
+          type: boolean
+        signedCommitmentAmount:
+          type: number
+
+    UpdateTransactionRequest:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        deletedAt:
+          type: string
+          format: date-time
+        limitedPartnerId:
+          type: string
+          format: uuid
+        fromAccountId:
+          type: string
+          format: uuid
+        toAccountId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        assetId:
+          type: string
+          format: uuid
+        description:
+          type: string
+        postedDate:
+          type: string
+          format: date-time
+        type:
+          type: string
+          enum:
+            - INVESTMENT
+            - DEPOSIT
+            - TRANSFER
+            - WITHDRAWAL
+            - FEE
+            - INTEREST
+        status:
+          type: string
+          enum:
+            - CREATED
+            - PENDING
+            - CANCELLED
+            - COMPLETED
+            - INITIATED
+        externalRef:
+          type: string
+        groupId:
+          type: string
+          format: uuid
+        bankAccountId:
+          type: string
+          format: uuid
+        paymentId:
+          type: string
+        commitment:
+          type: number
+        fromAccount:
+          "$ref": "#/components/schemas/Counterparty"
+        toAccount:
+          "$ref": "#/components/schemas/Counterparty"
+        bankAccount:
+          "$ref": "#/components/schemas/BankAccount"
+        dependsOn:
+          "$ref": "#/components/schemas/TransactionDependency"
+        limitedPartnerCapitalCallId:
+          type: string
+          format: uuid
+        paymentReference:
+          type: string
+        attributes:
+          "$ref": "#/components/schemas/TransactionAttributes"
+        notCreated:
+          type: boolean
+        renderable:
+          type: boolean
+        capitalCall:
+          type: boolean
+        payment:
+          type: boolean
+        gbptx:
+          type: boolean
+        distribution:
+          type: boolean
+        pendingOrInitiated:
+          type: boolean
+        receivingAsset:
+          type: boolean
+        isInternal:
+          type: boolean
+
+    Transaction:
+      required:
+        - amount
+        - assetId
+        - attributes
+        - bankAccount
+        - commitment
+        - description
+        - externalRef
+        - fromAccount
+        - fromAccountId
+        - groupId
+        - limitedPartnerId
+        - isInternal
+        - postedDate
+        - status
+        - toAccount
+        - toAccountId
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        deletedAt:
+          type: string
+          format: date-time
+        limitedPartnerId:
+          type: string
+          format: uuid
+        fromAccountId:
+          type: string
+          format: uuid
+        toAccountId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        assetId:
+          type: string
+          format: uuid
+        description:
+          type: string
+        postedDate:
+          type: string
+          format: date-time
+        type:
+          type: string
+          enum:
+            - INVESTMENT
+            - DEPOSIT
+            - TRANSFER
+            - WITHDRAWAL
+            - FEE
+            - INTEREST
+        status:
+          type: string
+          enum:
+            - CREATED
+            - PENDING
+            - CANCELLED
+            - COMPLETED
+            - INITIATED
+        externalRef:
+          type: string
+        groupId:
+          type: string
+          format: uuid
+        bankAccountId:
+          type: string
+          format: uuid
+        paymentId:
+          type: string
+        commitment:
+          type: number
+        fromAccount:
+          "$ref": "#/components/schemas/Counterparty"
+        toAccount:
+          "$ref": "#/components/schemas/Counterparty"
+        bankAccount:
+          "$ref": "#/components/schemas/BankAccount"
+        dependsOn:
+          "$ref": "#/components/schemas/TransactionDependency"
+        limitedPartnerCapitalCallId:
+          type: string
+          format: uuid
+        paymentReference:
+          type: string
+        attributes:
+          "$ref": "#/components/schemas/TransactionAttributes"
+        notCreated:
+          type: boolean
+        renderable:
+          type: boolean
+        capitalCall:
+          type: boolean
+        payment:
+          type: boolean
+        gbptx:
+          type: boolean
+        distribution:
+          type: boolean
+        pendingOrInitiated:
+          type: boolean
+        receivingAsset:
+          type: boolean
+        isInternal:
+          type: boolean
+    TransactionAttributes:
+      required:
+        - commitment
+        - internal
+      type: object
+      properties:
+        internal:
+          type: boolean
+        commitment:
+          type: number
+        paymentId:
+          type: string
+        bankAccountId:
+          type: string
+          format: uuid
+        modulrPaymentType:
+          type: string
+        dependsOn:
+          "$ref": "#/components/schemas/TransactionDependency"
+        paymentReference:
+          type: string
+        limitedPartnerCapitalCallId:
+          type: string
+          format: uuid
+
+    Counterparty:
+      required:
+        - accountNumber
+        - attributes
+        - bic
+        - currency
+        - externalId
+        - iban
+        - id
+        - sortCode
+        - status
+        - type
+        - wallet
+      type: object
+      properties:
+        balance:
+          type: number
+        id:
+          type: string
+          format: uuid
+        externalId:
+          type: string
+        currency:
+          type: string
+          enum:
+            - EUR
+            - GBP
+            - USD
+        status:
+          type: string
+          enum:
+            - CREATED
+            - ACTIVE
+            - IN_REVIEW
+            - VERIFIED
+            - BLOCKED
+            - CLOSED
+            - DELETED
+        accountNumber:
+          type: string
+        sortCode:
+          type: string
+        bic:
+          type: string
+        iban:
+          type: string
+        type:
+          type: string
+          enum:
+            - GIA
+            - ISA
+            - SIPP
+            - LISA
+            - JISA
+            - SAVING
+            - CURRENT
+            - EXTERNAL
+            - INVESTMENT
+        wallet:
+          "$ref": "#/components/schemas/Wallet"
+        active:
+          type: boolean
+        brokerName:
+          type: string
+          enum:
+            - NO_MONEY_MOVEMENT
+        gia:
+          type: boolean
+
+    UpdateCounterpartyRequest:
+      type: object
+      properties:
+        balance:
+          type: number
+        id:
+          type: string
+          format: uuid
+        externalId:
+          type: string
+        currency:
+          type: string
+          enum:
+            - EUR
+            - GBP
+            - USD
+        status:
+          type: string
+          enum:
+            - CREATED
+            - ACTIVE
+            - IN_REVIEW
+            - VERIFIED
+            - BLOCKED
+            - CLOSED
+            - DELETED
+        accountNumber:
+          type: string
+        sortCode:
+          type: string
+        bic:
+          type: string
+        iban:
+          type: string
+        type:
+          type: string
+          enum:
+            - GIA
+            - ISA
+            - SIPP
+            - LISA
+            - JISA
+            - SAVING
+            - CURRENT
+            - EXTERNAL
+            - INVESTMENT
+        wallet:
+          "$ref": "#/components/schemas/Wallet"
+        active:
+          type: boolean
+        brokerName:
+          type: string
+          enum:
+            - NO_MONEY_MOVEMENT
+        gia:
+          type: boolean
+
+    Wallet:
+      required:
+        - attributes
+        - broker
+        - externalId
+        - id
+        - limitedPartner
+        - limitedPartnerId
+        - ownerId
+        - status
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        limitedPartner:
+          "$ref": "#/components/schemas/LimitedPartner"
+        externalId:
+          type: string
+        broker:
+          "$ref": "#/components/schemas/Broker"
+        type:
+          type: string
+          enum:
+            - INDIVIDUAL
+            - COMPANY
+        status:
+          type: string
+          enum:
+            - CREATED
+            - ACTIVE
+            - IN_REVIEW
+            - VERIFIED
+            - BLOCKED
+            - CLOSED
+            - DELETED
+        attributes:
+          type: object
+        ownerId:
+          type: string
+          format: uuid
+        limitedPartnerId:
+          type: string
+          format: uuid
+
+    Broker:
+      required:
+        - contact
+        - id
+        - name
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          enum:
+            - NO_MONEY_MOVEMENT
+        type:
+          type: string
+          enum:
+            - CASH
+            - PRIVATE
+            - PUBLIC
+        contact:
+          type: string
+        brokerAttributes:
+          "$ref": "#/components/schemas/BrokerAttributes"
+        noMoneyMovement:
+          type: boolean
+
+    BrokerAttributes:
+      type: object
+      properties:
+        validateUnitsAndPrice:
+          type: boolean
+
+    LimitedPartner:
+      required:
+        - advisorId
+        - createdAt
+        - groupId
+        - id
+        - onboardingFlowId
+        - onfidoApplicantId
+        - profileId
+        - status
+        - type
+        - updatedAt
+        - userId
+      type: object
+      properties:
+        minimumInvestment:
+          type: integer
+          format: int32
+        id:
+          type: string
+          format: uuid
+        advisorId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        groupId:
+          type: string
+          format: uuid
+        onfidoApplicantId:
+          type: string
+          format: uuid
+        profileId:
+          type: string
+          format: uuid
+        onboardingFlowId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - individual
+            - institutional
+            - highNetWorthLimitedPartner
+            - sophisticatedLimitedPartner
+            - corporate
+        status:
+          type: string
+          enum:
+            - CREATED
+            - INVITATION_SENT
+            - INVITATION_REVOKED
+            - COOLING_OFF
+            - ONBOARDING
+            - ACTIVE
+            - LOCKED
+            - UNLOCKED
+            - READ_ONLY
+            - TERMINATED
+            - DELETED
+            - WAITING_FOR_REVIEW
+            - ACCESS_GRANTED
+            - ACCESS_DENIED
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateLimitedPartnerRequest:
+      type: object
+      required:
+        - userId
+        - profileId
+      properties:
+        userId:
+          type: string
+          format: uuid
+        profileId:
+          type: string
+          format: uuid
+
+    UpdateLimitedPartnerRequest:
+      type: object
+      properties:
+        minimumInvestment:
+          type: integer
+          format: int32
+        id:
+          type: string
+          format: uuid
+        advisorId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        groupId:
+          type: string
+          format: uuid
+        onfidoApplicantId:
+          type: string
+          format: uuid
+        profileId:
+          type: string
+          format: uuid
+        onboardingFlowId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - individual
+            - institutional
+            - highNetWorthLimitedPartner
+            - sophisticatedLimitedPartner
+            - corporate
+        status:
+          type: string
+          enum:
+            - CREATED
+            - INVITATION_SENT
+            - INVITATION_REVOKED
+            - COOLING_OFF
+            - ONBOARDING
+            - ACTIVE
+            - LOCKED
+            - UNLOCKED
+            - READ_ONLY
+            - TERMINATED
+            - DELETED
+            - WAITING_FOR_REVIEW
+            - ACCESS_GRANTED
+            - ACCESS_DENIED
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    TransactionDependency:
+      required:
+        - status
+        - transactionId
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - CREATED
+            - PENDING
+            - CANCELLED
+            - COMPLETED
+            - INITIATED
+
+    TransactionRequest:
+      type: object
+      properties:
+        transactionType:
+          type: string
+          enum:
+            - INVESTMENT
+            - DEPOSIT
+            - TRANSFER
+            - WITHDRAWAL
+            - FEE
+            - INTEREST
+        limitedPartnerId:
+          type: string
+          format: uuid
+        amount:
+          "$ref": "#/components/schemas/Money"
+        bankAccountId:
+          type: string
+          format: uuid
+        fromAccountId:
+          type: string
+          format: uuid
+        toAccountId:
+          type: string
+          format: uuid
+        groupId:
+          type: string
+          format: uuid
+        validWithdrawal:
+          type: boolean
+        validTransfer:
+          type: boolean
+
+    CounterpartyRequest:
+      required:
+        - walletAccountType
+      type: object
+      properties:
+        walletId:
+          type: string
+          format: uuid
+        walletAccountType:
+          type: string
+          enum:
+            - GIA
+            - ISA
+            - SIPP
+            - LISA
+            - JISA
+            - SAVING
+            - CURRENT
+            - EXTERNAL
+            - INVESTMENT
+
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - CREATED
+            - ACTIVE
+            - INACTIVE
+            - CLOSED
+        ticker:
+          type: string
+        type:
+          type: string
+        subType:
+          type: string
+        name:
+          type: string
+        isin:
+          type: string
+        parentId:
+          type: string
+          format: uuid
+        logoUrl:
+          type: string
+        currency:
+          type: string
+          enum:
+            - GBP
+            - USD
+            - EUR
+            - AUD
+            - JPY
+            - CAD
+            - CNY
+            - CHF
+            - SEK
+            - NZD
+            - MXN
+            - SGD
+            - HKD
+            - NOK
+            - KRW
+            - TRY
+            - INR
+            - RUB
+            - BRL
+            - ZAR
+            - GBX
+            - DKK
+            - PLN
+            - HUF
+            - CZK
+            - HRK
+            - BGN
+            - ISK
+            - RSD
+        attributes:
+          "$ref": "#/components/schemas/AssetAttributes"
+        distribution:
+          type: string
+          enum:
+            - DISTRIBUTING
+            - ACCUMULATING
+        payoutFrequency:
+          type: string
+        payoutDates:
+          type: string
+        shortName:
+          type: string
+        issuer:
+          type: string
+        maturity:
+          type: string
+          format: date-time
+        coupon:
+          type: number
+        isaEligible:
+          type: boolean
+        featured:
+          type: boolean
+        sector:
+          type: string
+        benchmarkIndex:
+          type: string
+        description:
+          type: string
+        message:
+          type: string
+        liquidity:
+          type: string
+        platformFee:
+          type: number
+        countryId:
+          type: string
+          format: uuid
+        tradeable:
+          type: boolean
+        public:
+          type: boolean
+        private:
+          type: boolean
+        active:
+          type: boolean
+        fractional:
+          type: boolean
+        strategy:
+          type: boolean
+        cash:
+          type: boolean
+
+    UpdateAssetRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - CREATED
+            - ACTIVE
+            - INACTIVE
+            - CLOSED
+        ticker:
+          type: string
+        type:
+          type: string
+        subType:
+          type: string
+        name:
+          type: string
+        isin:
+          type: string
+        parentId:
+          type: string
+          format: uuid
+        logoUrl:
+          type: string
+        currency:
+          type: string
+          enum:
+            - GBP
+            - USD
+            - EUR
+            - AUD
+            - JPY
+            - CAD
+            - CNY
+            - CHF
+            - SEK
+            - NZD
+            - MXN
+            - SGD
+            - HKD
+            - NOK
+            - KRW
+            - TRY
+            - INR
+            - RUB
+            - BRL
+            - ZAR
+            - GBX
+            - DKK
+            - PLN
+            - HUF
+            - CZK
+            - HRK
+            - BGN
+            - ISK
+            - RSD
+        attributes:
+          "$ref": "#/components/schemas/AssetAttributes"
+        distribution:
+          type: string
+          enum:
+            - DISTRIBUTING
+            - ACCUMULATING
+        payoutFrequency:
+          type: string
+        payoutDates:
+          type: string
+        shortName:
+          type: string
+        issuer:
+          type: string
+        maturity:
+          type: string
+          format: date-time
+        coupon:
+          type: number
+        isaEligible:
+          type: boolean
+        featured:
+          type: boolean
+        sector:
+          type: string
+        benchmarkIndex:
+          type: string
+        description:
+          type: string
+        message:
+          type: string
+        liquidity:
+          type: string
+        platformFee:
+          type: number
+        countryId:
+          type: string
+          format: uuid
+        tradeable:
+          type: boolean
+        public:
+          type: boolean
+        private:
+          type: boolean
+        active:
+          type: boolean
+        fractional:
+          type: boolean
+        strategy:
+          type: boolean
+        cash:
+          type: boolean
+
+    AssetAttributes:
+      required:
+        - currency
+      type: object
+      properties:
+        currency:
+          type: string
+          enum:
+            - GBP
+            - USD
+            - EUR
+            - AUD
+            - JPY
+            - CAD
+            - CNY
+            - CHF
+            - SEK
+            - NZD
+            - MXN
+            - SGD
+            - HKD
+            - NOK
+            - KRW
+            - TRY
+            - INR
+            - RUB
+            - BRL
+            - ZAR
+            - GBX
+            - DKK
+            - PLN
+            - HUF
+            - CZK
+            - HRK
+            - BGN
+            - ISK
+            - RSD
+        kid_link:
+          type: string
+        logo_link:
+          type: string
+        allocation:
+          type: number
+        closingDate:
+          type: string
+        isFractional:
+          type: boolean
+
+    AssetValuation:
+      type: object
+      required: valuation
+      properties:
+        valuation:
+          "$ref": "#/components/schemas/Money"
+
+    Money:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+          enum:
+            - GBP
+            - USD
+            - EUR
+            - AUD
+            - JPY
+            - CAD
+            - CNY
+            - CHF
+            - SEK
+            - NZD
+            - MXN
+            - SGD
+            - HKD
+            - NOK
+            - KRW
+            - TRY
+            - INR
+            - RUB
+            - BRL
+            - ZAR
+            - GBX
+            - DKK
+            - PLN
+            - HUF
+            - CZK
+            - HRK
+            - BGN
+            - ISK
+            - RSD
+
+    AssetValuationRequest:
+      type: object
+      required: assetId
+      properties:
+        assetId:
+          type: string
+          format: UUID
+        date:
+          type: string
+
+    BankAccount:
+      required:
+        - accountHolder
+        - accountNumber
+        - accountType
+        - bankId
+        - iban
+        - id
+        - limitedPartnerId
+        - sortCode
+        - swiftCode
+        - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        limitedPartnerId:
+          type: string
+          format: uuid
+        bankId:
+          type: string
+          format: uuid
+        accountHolder:
+          type: string
+        accountNumber:
+          type: string
+        sortCode:
+          type: string
+        iban:
+          type: string
+        swiftCode:
+          type: string
+        type:
+          type: string
+          enum:
+            - DOMESTIC
+            - INTERNATIONAL
+        accountType:
+          type: string
+          enum:
+            - business
+            - individual
+
+    UpdateBankAccountRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        limitedPartnerId:
+          type: string
+          format: uuid
+        bankId:
+          type: string
+          format: uuid
+        accountHolder:
+          type: string
+        accountNumber:
+          type: string
+        sortCode:
+          type: string
+        iban:
+          type: string
+        swiftCode:
+          type: string
+        type:
+          type: string
+          enum:
+            - DOMESTIC
+            - INTERNATIONAL
+        accountType:
+          type: string
+          enum:
+            - business
+            - individual
+
+    BankAccountRequest:
+      type: object
+      required:
+        - bankId
+        - type
+        - accountType
+      properties:
+        bankId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - DOMESTIC
+            - INTERNATIONAL
+        accountType:
+          type: string
+          enum:
+            - business
+            - individual
+    FundAdmin:
+      type: object
+      required:
+        - firstName
+        - middleName
+        - resourceId
+        - description
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        resourceId:
+          type: string
+        description:
+          type: string
+
+    FundAdminRequest:
+      type: object
+      required:
+        - firstName
+        - middleName
+        - resourceId
+        - description
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        resourceId:
+          type: string
+        description:
+          type: string
+
+    UpdateFundAdminRequest:
+      type: object
+      required: id
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        resourceId:
+          type: string
+        description:
+          type: string
+
+    Document:
+      required:
+        - createdAt
+        - documentFormat
+        - documentSource
+        - documentType
+        - id
+        - limitedPartnerId
+        - name
+        - updatedAt
+        - url
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        limitedPartnerId:
+          type: string
+          format: uuid
+        documentSource:
+          type: string
+          enum:
+            - onfido
+            - fund_admin
+            - b2b
+        documentType:
+          type: string
+          enum:
+            - capital_call
+            - passport
+            - national_identity_card
+            - driving_licence
+            - voter_id
+            - work_permit
+            - utility_bill
+            - fund_statement
+            - bank_statement
+            - building_society_statement
+            - council_tax
+            - benefit_letter
+            - mortgage_statement
+            - mobile_phone_bill
+            - general_letter
+            - insurance_statement
+            - brokerage_statement
+            - pension_statement
+            - pension_letter
+            - property_tax_statement
+            - property_tax_letter
+            - identity_document
+            - address_certificate
+            - subscription_agreements
+            - quarterly_reports
+            - contract_notes
+        documentFormat:
+          type: string
+          enum:
+            - pdf
+            - png
+            - jpg
+        url:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        key:
+          type: string
+        previewKey:
+          type: string
+        visibleToLimitedPartner:
+          type: boolean
+        previewContentType:
+          type: string
+
+    UpdateDocumentRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        limitedPartnerId:
+          type: string
+          format: uuid
+        documentSource:
+          type: string
+          enum:
+            - onfido
+            - fund_admin
+            - b2b
+        documentType:
+          type: string
+          enum:
+            - capital_call
+            - passport
+            - national_identity_card
+            - driving_licence
+            - voter_id
+            - work_permit
+            - utility_bill
+            - fund_statement
+            - bank_statement
+            - building_society_statement
+            - council_tax
+            - benefit_letter
+            - mortgage_statement
+            - mobile_phone_bill
+            - general_letter
+            - insurance_statement
+            - brokerage_statement
+            - pension_statement
+            - pension_letter
+            - property_tax_statement
+            - property_tax_letter
+            - identity_document
+            - address_certificate
+            - subscription_agreements
+            - quarterly_reports
+            - contract_notes
+        documentFormat:
+          type: string
+          enum:
+            - pdf
+            - png
+            - jpg
+        url:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        key:
+          type: string
+        previewKey:
+          type: string
+        visibleToLimitedPartner:
+          type: boolean
+        previewContentType:
+          type: string
+
+    RetrievalProgress:
+      required:
+        - percentage
+      type: object
+      properties:
+        expected:
+          type: integer
+          format: int32
+        received:
+          type: integer
+          format: int32
+        percentage:
+          type: number
+        issueReport:
+          type: boolean
+        financialDocumentRetrievalItems:
+          type: array
+          items:
+            "$ref": "#/components/schemas/FinancialDocumentRetrievalItem"
+
+    FinancialDocumentRetrievalItem:
+      required:
+        - firstName
+        - limitedPartnerId
+        - lastName
+      type: object
+      properties:
+        documentId:
+          type: string
+          format: uuid
+        limitedPartnerId:
+          type: string
+          format: uuid
+        link:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        visible:
+          type: boolean
+        visibleToAdvisor:
+          type: boolean
+
+    IssueDocumentsRequest:
+      required:
+        - advisorId
+        - documentIds
+      type: object
+      properties:
+        advisorId:
+          type: string
+          format: uuid
+        documentIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    CreateDocumentRequest:
+      required:
+        - documentCategoryId
+        - format
+        - limitedPartnerId
+        - isVisibleToLimitedPartner
+        - name
+        - source
+        - type
+        - url
+      type: object
+      properties:
+        limitedPartnerId:
+          type: string
+          format: uuid
+        documentCategoryId:
+          type: string
+          format: uuid
+        source:
+          type: string
+          enum:
+            - onfido
+            - fund_admin
+            - b2b
+        format:
+          type: string
+          enum:
+            - pdf
+            - png
+            - jpg
+        type:
+          type: string
+          enum:
+            - capital_call
+            - passport
+            - national_identity_card
+            - driving_licence
+            - voter_id
+            - work_permit
+            - utility_bill
+            - fund_statement
+            - bank_statement
+            - building_society_statement
+            - council_tax
+            - benefit_letter
+            - mortgage_statement
+            - mobile_phone_bill
+            - general_letter
+            - insurance_statement
+            - brokerage_statement
+            - pension_statement
+            - pension_letter
+            - property_tax_statement
+            - property_tax_letter
+            - identity_document
+            - address_certificate
+            - subscription_agreements
+            - quarterly_reports
+            - contract_notes
+        url:
+          type: string
+        name:
+          type: string
+        isVisibleToLimitedPartner:
+          type: boolean
+
+    DocumentWatermark:
+      type: object
+      required:
+        - watermarkURL
+      properties:
+        watermarkURL:
+          type: string
+          format: uri
+          description: URL to access the watermarked document
+
+    BasicApiResponse:
+      type: object
+      properties:
+        data:
+          type: object
+        meta:
+          type: object
+          additionalProperties:
+            type: object
+        errors:
+          $ref: "#/components/schemas/ErrorResponse"
+
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+          format: int64
+        statusCode:
+          "$ref": "#/components/schemas/HttpStatusCode"
+        message:
+          type: string
+
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+
+    ApiResponseTransaction:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Transaction"
+
+    ApiResponseDocumentWatermark:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/DocumentWatermark"
+
+    ApiResponseLimitedPartner:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/LimitedPartner"
+
+    ApiResponseProfile:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Profile"
+
+    ApiResponseGeneralPartner:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/GeneralPartner"
+
+    ApiResponseDocument:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Document"
+
+    ApiResponseUser:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/User"
+
+    ApiResponseDocumentRetrievalDetails:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/RetrievalProgress"
+
+    ApiResponseFundAdmin:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/FundAdmin"
+
+    ApiResponseBankAccount:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/BankAccount"
+
+    ApiResponseAssetValuation:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/AssetValuation"
+
+    ApiResponseAsset:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Asset"
+
+    ApiResponseIssueDocumentTypes:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/ApiResponseIssueDocumentTypes"
+
+    ApiResponseCounterparty:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Counterparty"
+
+    ApiResponseSubscription:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Subscription"
+
+    ApiResponseSubscriptions:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: array
+          properties:
+            data:
+              $ref: "#/components/schemas/Subscription"
+
+    ApiResponseLimitedPartnerCapitalCall:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/LimitedPartnerCapitalCall"
+
+    ApiResponseLimitedPartnerCapitalCalls:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: array
+          properties:
+            data:
+              $ref: "#/components/schemas/ApiResponseLimitedPartnerCapitalCalls"
+
+    ApiResponseCapitalCall:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/CapitalCall"
+
+    ApiResponseCapitalCalls:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: array
+          properties:
+            data:
+              $ref: "#/components/schemas/CapitalCall"
+
+    ApiResponseUsers:
+      allOf:
+        - $ref: "#/components/schemas/BasicApiResponse"
+        - type: array
+          properties:
+            data:
+              $ref: "#/components/schemas/User"
