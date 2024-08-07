@@ -4032,7 +4032,7 @@
   resolved "https://registry.yarnpkg.com/@jsep-plugin/regex/-/regex-1.0.3.tgz#3aeaa2e5fa45d89de116aeafbfa41c95935b7f6d"
   integrity sha512-XfZgry4DwEZvSFtS/6Y+R48D7qJYJK6R9/yJFyUFHCIUMEEHuJ4X95TDgJp5QkmzfLYvapMPzskV5HpIDrREug==
 
-"@kubb/cli@^2.12.3":
+"@kubb/cli@^2.25.0":
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/@kubb/cli/-/cli-2.25.1.tgz#faa86f9791be643c9af4e93fc064704e672bc2e8"
   integrity sha512-LZQDoDW/QdxkKRZmgCaxr5niIyUKGhxKpGxpJg3OAebrW2G4gKnmtstjK/rtogWFlWot+EdOVi0EXVccfyNAVQ==
@@ -4053,7 +4053,7 @@
     string-argv "^0.3.2"
     tinyrainbow "^1.2.0"
 
-"@kubb/core@2.25.1", "@kubb/core@^2.12.3":
+"@kubb/core@2.25.1", "@kubb/core@^2.25.0":
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/@kubb/core/-/core-2.25.1.tgz#a818cec712e24f1922cf7eca3ca7540797905d14"
   integrity sha512-t6rrF6CiW3a6v49BgkjB4Hqdj2AVLIR6UIVe1BZrHeENlKh/+JY9wdzFJgckex+xfJ4T0ZxF239Du3CHMfMQGg==
@@ -4116,7 +4116,7 @@
     "@stoplight/yaml" "^4.3.0"
     remeda "^2.7.1"
 
-"@kubb/plugin-redoc@^2.19.6":
+"@kubb/plugin-redoc@^2.25.0":
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/@kubb/plugin-redoc/-/plugin-redoc-2.25.1.tgz#5d151fbd233bbc1be4aa804f190ee7061886e9e1"
   integrity sha512-vwbKsOC8rbJ6TgEkZYkLj/oGEg76Wgd0NNLmyc2v1BmXNqNk0X8dLqcimXh9clVOYekjAa4WSa4jL5tgUcEFpw==
@@ -4141,7 +4141,7 @@
     "@kubb/parser-ts" "2.25.1"
     natural-orderby "^3.0.2"
 
-"@kubb/swagger-client@2.25.1", "@kubb/swagger-client@^2.21.0":
+"@kubb/swagger-client@2.25.1", "@kubb/swagger-client@^2.25.0":
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/@kubb/swagger-client/-/swagger-client-2.25.1.tgz#45d357066079c86f3d64b98f4adea927d7215f7c"
   integrity sha512-6fl850BT7UF8BUackQDjiCr6KSVvxv0JROA7vjZXcxI2vswuBar9gqIGL9oxHT7q6BN2IyTac1iLbx6dnYYHKg==
@@ -4154,7 +4154,7 @@
     "@kubb/react" "2.25.1"
     "@kubb/swagger-ts" "2.25.1"
 
-"@kubb/swagger-faker@2.25.1", "@kubb/swagger-faker@^2.19.5":
+"@kubb/swagger-faker@2.25.1", "@kubb/swagger-faker@^2.25.0":
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/@kubb/swagger-faker/-/swagger-faker-2.25.1.tgz#fa3d216c0bfff87e74285195f41dbd11ea1d001f"
   integrity sha512-ok66+8SzWha0ngUAynMGhxF5YudUHn5gNI+jwwdqRvFAyu8GJU2mNyBPC98kUmKi53y+4yYv7WTRTrg4NpUyKA==
@@ -4167,7 +4167,7 @@
     "@kubb/react" "2.25.1"
     "@kubb/swagger-ts" "2.25.1"
 
-"@kubb/swagger-msw@^2.19.5":
+"@kubb/swagger-msw@^2.25.0":
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/@kubb/swagger-msw/-/swagger-msw-2.25.1.tgz#e6589bfb6372ab292b85da9c59288f5568822b9d"
   integrity sha512-q1HKl2sdSzVriDJCQIj5HNxV8dQ6fYcbhgKfwuRKolVAX9Ss715atjvEHEEJNkrms2QiybFgjyfsZEwhElaM1A==
@@ -4181,7 +4181,7 @@
     "@kubb/swagger-faker" "2.25.1"
     "@kubb/swagger-ts" "2.25.1"
 
-"@kubb/swagger-tanstack-query@^2.12.3":
+"@kubb/swagger-tanstack-query@^2.25.0":
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/@kubb/swagger-tanstack-query/-/swagger-tanstack-query-2.25.1.tgz#f5f63274fee208d032477dc381337bb677ea5a57"
   integrity sha512-VpEc+s+LdqxhUFqDpp5mte2YsLUPw531ZhVaxamFEBbfUFutVjnMJ8B/vH2F6ENBDhjdOyH/NjfWB/XdWGdJBw==
@@ -4196,7 +4196,7 @@
     "@kubb/swagger-ts" "2.25.1"
     "@kubb/swagger-zod" "2.25.1"
 
-"@kubb/swagger-ts@2.25.1", "@kubb/swagger-ts@^2.21.0":
+"@kubb/swagger-ts@2.25.1", "@kubb/swagger-ts@^2.25.0":
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/@kubb/swagger-ts/-/swagger-ts-2.25.1.tgz#0b3960f9c1a08d4de7783a03f6626fb1cccbdcb8"
   integrity sha512-ZuBOfgXWpOgggSo7cA47UXlXxDL8vfk8T3i0LioRTxoh1sMzYCjJcfIjFmE0mtt5xc3hJz81CdHi0k7ixlCf3Q==
@@ -4209,7 +4209,7 @@
     "@kubb/react" "2.25.1"
     "@kubb/types" "2.25.1"
 
-"@kubb/swagger-zod@2.25.1", "@kubb/swagger-zod@^2.12.3":
+"@kubb/swagger-zod@2.25.1", "@kubb/swagger-zod@^2.25.0":
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/@kubb/swagger-zod/-/swagger-zod-2.25.1.tgz#dcbe694fd78b55ae60b19a4e4400341f0ba147b3"
   integrity sha512-+VEm1fcBpWlOWghKX3wjbT4HcdUEvjoBksDt1XOss7Lyep48TR+FuyYiic3trx4QPb5oNbSOAuvyWHHJYGOQkw==
@@ -4222,7 +4222,7 @@
     "@kubb/react" "2.25.1"
     "@kubb/swagger-ts" "2.25.1"
 
-"@kubb/swagger@^2.21.0":
+"@kubb/swagger@^2.25.0":
   version "2.25.1"
   resolved "https://registry.yarnpkg.com/@kubb/swagger/-/swagger-2.25.1.tgz#7d3a787284155c6b378ec1cd2a4406d63b4d23bc"
   integrity sha512-kR4Pa/9k0tjeekg17itT/hwLfLxHMElykFeLmBYri5FirLFlSRrHIF6z1f76/KQzzYwWo2n+6+j+CykDjRNRYA==
